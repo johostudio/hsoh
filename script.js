@@ -1,5 +1,5 @@
 // Last.fm API Configuration
-const LASTFM_API_KEY = 'YOUR_API_KEY_HERE'; // Users will need to replace this with their own API key
+const LASTFM_API_KEY = 'cd1214f227b0a1abd53367407947e7ab'; // Last.fm API key for stats functionality
 const LASTFM_API_URL = 'https://ws.audioscrobbler.com/2.0/';
 
 // DOM Elements

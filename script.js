@@ -46,6 +46,12 @@ async function loadLastFmStats() {
         return;
     }
 
+    // Validate API key
+    if (LASTFM_API_KEY === 'YOUR_API_KEY_HERE' || !LASTFM_API_KEY) {
+        showError('Please add your Last.fm API key to script.js. Get one free at https://www.last.fm/api/account/create');
+        return;
+    }
+
     // Save username to localStorage
     localStorage.setItem('lastfm-username', username);
 
@@ -153,7 +159,6 @@ function displayTopArtists(artists) {
                     <div class="item-name">${artist.name}</div>
                     <div class="item-artist">${formatNumber(artist.playcount)} plays</div>
                 </div>
-                <div class="item-playcount">${formatNumber(artist.playcount)}</div>
             </div>
         `;
     }).join('');

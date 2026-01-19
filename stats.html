@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HSOH - Music Stats</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Navigation -->
+        <nav>
+            <div class="nav-container">
+                <a href="index.html" class="nav-brand">HSOH</a>
+                <div class="nav-links">
+                    <a href="portfolio.html" class="nav-link">Portfolio</a>
+                    <a href="stats.html" class="nav-link active">Stats</a>
+                    <a href="recommendations.html" class="nav-link">Recommendations</a>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Page Header -->
+        <header>
+            <h1>Music Stats</h1>
+            <p class="tagline">My Last.fm Statistics & Listening History</p>
+        </header>
+
+        <!-- Last.fm Stats Section -->
+        <section class="lastfm-stats">
+            <h2>Last.fm Statistics</h2>
+
+            <div class="lastfm-config">
+                <input type="text" id="lastfm-username" placeholder="Enter your Last.fm username">
+                <button id="load-stats-btn">Load Stats</button>
+            </div>
+
+            <div id="stats-container" class="stats-hidden">
+                <!-- User Info -->
+                <div class="user-info">
+                    <img id="user-avatar" src="" alt="User Avatar" class="avatar">
+                    <div class="user-details">
+                        <h3 id="user-name"></h3>
+                        <p id="user-playcount"></p>
+                    </div>
+                </div>
+
+                <!-- Stats Grid -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <h3>Total Scrobbles</h3>
+                        <p class="stat-value" id="total-scrobbles">-</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Artists</h3>
+                        <p class="stat-value" id="total-artists">-</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Tracks</h3>
+                        <p class="stat-value" id="total-tracks">-</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Albums</h3>
+                        <p class="stat-value" id="total-albums">-</p>
+                    </div>
+                </div>
+
+                <!-- Top Artists -->
+                <div class="top-section">
+                    <h3>Top Artists (7 Days)</h3>
+                    <div id="top-artists" class="top-list"></div>
+                </div>
+
+                <!-- Top Tracks -->
+                <div class="top-section">
+                    <h3>Top Tracks (7 Days)</h3>
+                    <div id="top-tracks" class="top-list"></div>
+                </div>
+
+                <!-- Recent Tracks -->
+                <div class="top-section">
+                    <h3>Recently Played</h3>
+                    <div id="recent-tracks" class="top-list"></div>
+                </div>
+            </div>
+
+            <div id="error-message" class="error-hidden"></div>
+        </section>
+
+        <!-- Footer -->
+        <footer>
+            <p>&copy; 2026 HSOH. All rights reserved.</p>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

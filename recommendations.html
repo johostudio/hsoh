@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HSOH - Music Recommendations</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Navigation -->
+        <nav>
+            <div class="nav-container">
+                <a href="index.html" class="nav-brand">HSOH</a>
+                <div class="nav-links">
+                    <a href="portfolio.html" class="nav-link">Portfolio</a>
+                    <a href="stats.html" class="nav-link">Stats</a>
+                    <a href="recommendations.html" class="nav-link active">Recommendations</a>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Page Header -->
+        <header>
+            <h1>Music Recommendations</h1>
+            <p class="tagline">My Favorite Music Discoveries & Suggestions</p>
+        </header>
+
+        <!-- Add Recommendation Section -->
+        <section class="add-recommendation">
+            <h2>Add New Recommendation</h2>
+            <form id="recommendation-form" class="recommendation-form">
+                <div class="form-group">
+                    <label for="rec-type">Type:</label>
+                    <select id="rec-type" required>
+                        <option value="">Select Type</option>
+                        <option value="album">Album</option>
+                        <option value="artist">Artist</option>
+                        <option value="song">Song</option>
+                        <option value="playlist">Playlist</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="rec-title">Title:</label>
+                    <input type="text" id="rec-title" placeholder="Album/Artist/Song name" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="rec-artist">Artist (optional):</label>
+                    <input type="text" id="rec-artist" placeholder="Artist name">
+                </div>
+
+                <div class="form-group">
+                    <label for="rec-description">Why I recommend it:</label>
+                    <textarea id="rec-description" placeholder="Share your thoughts about this music..." rows="4"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="rec-link">Link (optional):</label>
+                    <input type="url" id="rec-link" placeholder="https://...">
+                </div>
+
+                <button type="submit" class="submit-btn">Add Recommendation</button>
+            </form>
+        </section>
+
+        <!-- Recommendations Display -->
+        <section class="recommendations-display">
+            <h2>My Recommendations</h2>
+            <div id="recommendations-list" class="recommendations-list">
+                <!-- Recommendations will be added here -->
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer>
+            <p>&copy; 2026 HSOH. All rights reserved.</p>
+        </footer>
+    </div>
+
+    <script src="recommendations.js"></script>
+</body>
+</html>

@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HSOH - Music Home</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header Section -->
+        <header>
+            <h1>HSOH</h1>
+            <p class="tagline">My Music Home</p>
+        </header>
+
+        <!-- Music Platforms Section -->
+        <section class="music-platforms">
+            <h2>Find My Music</h2>
+            <div class="platform-links">
+                <a href="https://open.spotify.com" target="_blank" class="platform-btn spotify">
+                    <span class="icon">🎵</span> Spotify
+                </a>
+                <a href="https://music.apple.com" target="_blank" class="platform-btn apple-music">
+                    <span class="icon">🎧</span> Apple Music
+                </a>
+                <a href="https://soundcloud.com" target="_blank" class="platform-btn soundcloud">
+                    <span class="icon">☁️</span> SoundCloud
+                </a>
+                <a href="https://www.youtube.com" target="_blank" class="platform-btn youtube">
+                    <span class="icon">▶️</span> YouTube
+                </a>
+                <a href="https://www.last.fm" target="_blank" class="platform-btn lastfm">
+                    <span class="icon">📊</span> Last.fm
+                </a>
+            </div>
+        </section>
+
+        <!-- Video Showcase Section -->
+        <section class="video-showcase">
+            <h2>Featured Videos</h2>
+            <div class="video-grid">
+                <div class="video-container">
+                    <iframe 
+                        src="https://www.youtube.com/embed/dQw4w9WgXcQ" 
+                        title="Video 1" 
+                        frameborder="0" 
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                        allowfullscreen>
+                    </iframe>
+                </div>
+                <div class="video-container">
+                    <iframe 
+                        src="https://www.youtube.com/embed/dQw4w9WgXcQ" 
+                        title="Video 2" 
+                        frameborder="0" 
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                        allowfullscreen>
+                    </iframe>
+                </div>
+            </div>
+        </section>
+
+        <!-- Last.fm Stats Section -->
+        <section class="lastfm-stats">
+            <h2>Last.fm Statistics</h2>
+            
+            <div class="lastfm-config">
+                <input type="text" id="lastfm-username" placeholder="Enter your Last.fm username">
+                <button id="load-stats-btn">Load Stats</button>
+            </div>
+
+            <div id="stats-container" class="stats-hidden">
+                <!-- User Info -->
+                <div class="user-info">
+                    <img id="user-avatar" src="" alt="User Avatar" class="avatar">
+                    <div class="user-details">
+                        <h3 id="user-name"></h3>
+                        <p id="user-playcount"></p>
+                    </div>
+                </div>
+
+                <!-- Stats Grid -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <h3>Total Scrobbles</h3>
+                        <p class="stat-value" id="total-scrobbles">-</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Artists</h3>
+                        <p class="stat-value" id="total-artists">-</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Tracks</h3>
+                        <p class="stat-value" id="total-tracks">-</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Albums</h3>
+                        <p class="stat-value" id="total-albums">-</p>
+                    </div>
+                </div>
+
+                <!-- Top Artists -->
+                <div class="top-section">
+                    <h3>Top Artists (7 Days)</h3>
+                    <div id="top-artists" class="top-list"></div>
+                </div>
+
+                <!-- Top Tracks -->
+                <div class="top-section">
+                    <h3>Top Tracks (7 Days)</h3>
+                    <div id="top-tracks" class="top-list"></div>
+                </div>
+
+                <!-- Recent Tracks -->
+                <div class="top-section">
+                    <h3>Recently Played</h3>
+                    <div id="recent-tracks" class="top-list"></div>
+                </div>
+            </div>
+
+            <div id="error-message" class="error-hidden"></div>
+        </section>
+
+        <!-- Footer -->
+        <footer>
+            <p>&copy; 2026 HSOH. All rights reserved.</p>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

@@ -28,13 +28,11 @@ usernameInput.addEventListener('keypress', (e) => {
     }
 });
 
-// Check if username is stored in localStorage
+// Auto-load stats for default username on page load
 window.addEventListener('DOMContentLoaded', () => {
-    const savedUsername = localStorage.getItem('lastfm-username');
-    if (savedUsername) {
-        usernameInput.value = savedUsername;
-        loadLastFmStats();
-    }
+    const defaultUsername = 'hosshh';
+    usernameInput.value = defaultUsername;
+    loadLastFmStats();
 });
 
 // Main function to load Last.fm stats

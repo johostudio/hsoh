@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useRef, useState, useMemo } from 'react';
 import { useFrame } from '@react-three/fiber';
 import { useGLTF, Html } from '@react-three/drei';
 import type * as THREE from 'three';
@@ -11,7 +11,7 @@ interface BookModelProps {
   textures?: TexturePaths;
 }
 
-function FallbackBook({ onOpen }: { onOpen: () => void }) {
+export function FallbackBook({ onOpen }: { onOpen: () => void }) {
   const ref = useRef<THREE.Group>(null);
   const [hovered, setHovered] = useState(false);
 
@@ -63,6 +63,10 @@ function FallbackBook({ onOpen }: { onOpen: () => void }) {
 export default function BookModel({ modelPath, onOpen, textures }: BookModelProps) {
   const ref = useRef<THREE.Group>(null);
   const [hovered, setHovered] = useState(false);
+  const { scene } = useGLTF(modelPath);
+  const clonedScene = useMemo(() => scene.clone(), [scene]);
+
+  useApplyTextures(clonedScene, textures);
 
   useFrame((_, delta) => {
     if (ref.current) {
@@ -70,37 +74,28 @@ export default function BookModel({ modelPath, onOpen, textures }: BookModelProp
     }
   });
 
-  try {
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    const { scene } = useGLTF(modelPath);
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    useApplyTextures(scene, textures);
-
-    return (
-      <group>
-        <primitive
-          ref={ref}
-          object={scene}
-          onClick={onOpen}
-          onPointerOver={() => setHovered(true)}
-          onPointerOut={() => setHovered(false)}
-          scale={hovered ? 1.05 : 1}
-        />
-        <Html center position={[0, -1.8, 0]}>
-          <span
-            style={{
-              color: '#a5b4fc',
-              fontSize: '12px',
-              fontWeight: 600,
-              whiteSpace: 'nowrap',
-            }}
-          >
-            Click to explore
-          </span>
-        </Html>
-      </group>
-    );
-  } catch {
-    return <FallbackBook onOpen={onOpen} />;
-  }
+  return (
+    <group>
+      <primitive
+        ref={ref}
+        object={clonedScene}
+        onClick={onOpen}
+        onPointerOver={() => setHovered(true)}
+        onPointerOut={() => setHovered(false)}
+        scale={hovered ? 1.05 : 1}
+      />
+      <Html center position={[0, -1.8, 0]}>
+        <span
+          style={{
+            color: '#a5b4fc',
+            fontSize: '12px',
+            fontWeight: 600,
+            whiteSpace: 'nowrap',
+          }}
+        >
+          Click to explore
+        </span>
+      </Html>
+    </group>
+  );
 }

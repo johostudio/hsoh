@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useRef, useMemo } from 'react';
 import { useGLTF } from '@react-three/drei';
 import { useFrame } from '@react-three/fiber';
 import type * as THREE from 'three';
@@ -19,9 +19,10 @@ export default function RotatableModel({
   textures,
 }: RotatableModelProps) {
   const { scene } = useGLTF(modelPath);
+  const clonedScene = useMemo(() => scene.clone(), [scene]);
   const meshRef = useRef<THREE.Group>(null);
 
-  useApplyTextures(scene, textures);
+  useApplyTextures(clonedScene, textures);
 
   useFrame((_, delta) => {
     if (meshRef.current) {
@@ -32,7 +33,7 @@ export default function RotatableModel({
   return (
     <primitive
       ref={meshRef}
-      object={scene}
+      object={clonedScene}
       scale={scale}
       position={position}
     />

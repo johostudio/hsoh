@@ -3,6 +3,12 @@ import { useTexture } from '@react-three/drei';
 import * as THREE from 'three';
 import type { TexturePaths } from '../types';
 
+// Minimal 1x1 transparent PNG used as a no-op placeholder when no
+// external textures are supplied. Required because useTexture is a hook
+// and must always be called with the same shape.
+const NOOP_TEXTURE =
+  'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=';
+
 /**
  * Hook that loads external texture files and applies them to every mesh
  * material in a GLB scene. Call after useGLTF — pass the returned scene
@@ -33,9 +39,9 @@ export function useApplyTextures(
   const hasTextures = Object.keys(pathMap).length > 0;
 
   // useTexture must always be called (rules of hooks), so provide a
-  // harmless fallback when there are no external textures.
+  // harmless 1x1 transparent PNG placeholder when there are no external textures.
   const loaded = useTexture(
-    hasTextures ? pathMap : { _noop: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAC0lEQVQI12NgAAIABQABNjN9GQAAAAlwSFlzAAAWJQAAFiUBSVIk8AAAAA0lEQVQI12P4z8BQDwAEgAF/QualzQAAAABJRU5ErkJggg==' },
+    hasTextures ? pathMap : { _noop: NOOP_TEXTURE },
   );
 
   useEffect(() => {

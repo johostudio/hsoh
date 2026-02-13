@@ -2,12 +2,13 @@ import { Suspense, useState } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { OrbitControls, Environment } from '@react-three/drei';
 import { useNavigate } from 'react-router-dom';
-import BookModel from './BookModel';
+import BookModel, { FallbackBook } from './BookModel';
 import FilmStillCarousel from './FilmStillCarousel';
 import LightboxViewer from './LightboxViewer';
+import { ModelErrorBoundary } from '../ModelErrorBoundary';
 import type { FilmStill } from '../../types';
 
-const BOOK_MODEL_PATH = '/models/book.glb';
+const BOOK_MODEL_PATH = '/models/headphones.glb';
 
 // Placeholder film stills - replace with actual content
 const FILM_STILLS: FilmStill[] = [
@@ -34,12 +35,14 @@ export default function GalleryPage() {
             <directionalLight position={[3, 5, 3]} intensity={0.8} />
             <spotLight position={[0, 5, 0]} intensity={0.5} angle={0.4} />
 
-            <Suspense fallback={null}>
-              <BookModel
-                modelPath={BOOK_MODEL_PATH}
-                onOpen={() => setShowGallery(true)}
-              />
-            </Suspense>
+            <ModelErrorBoundary fallback={<FallbackBook onOpen={() => setShowGallery(true)} />}>
+              <Suspense fallback={<FallbackBook onOpen={() => setShowGallery(true)} />}>
+                <BookModel
+                  modelPath={BOOK_MODEL_PATH}
+                  onOpen={() => setShowGallery(true)}
+                />
+              </Suspense>
+            </ModelErrorBoundary>
 
             <Environment preset="apartment" />
             <OrbitControls enablePan={false} enableZoom={false} />

@@ -8,6 +8,7 @@ import {
 import { useNavigate } from 'react-router-dom';
 import RotatableModel from './RotatableModel';
 import FloatingIcons from './FloatingIcons';
+import { ModelErrorBoundary } from '../ModelErrorBoundary';
 import type { FloatingIconData, TexturePaths } from '../../types';
 
 const MODEL_PATH = '/models/landing.glb';
@@ -67,9 +68,11 @@ export default function LandingPage() {
         <directionalLight position={[5, 5, 5]} intensity={1} castShadow />
         <pointLight position={[-3, 2, -3]} intensity={0.5} color="#a78bfa" />
 
-        <Suspense fallback={<FallbackModel />}>
-          <RotatableModel modelPath={MODEL_PATH} scale={1.5} textures={LANDING_TEXTURES} />
-        </Suspense>
+        <ModelErrorBoundary fallback={<FallbackModel />}>
+          <Suspense fallback={<FallbackModel />}>
+            <RotatableModel modelPath={MODEL_PATH} scale={1.5} textures={LANDING_TEXTURES} />
+          </Suspense>
+        </ModelErrorBoundary>
 
         <FloatingIcons icons={FLOATING_ICONS} />
 

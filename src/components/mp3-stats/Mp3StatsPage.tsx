@@ -2,9 +2,10 @@ import { Suspense, useState } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { OrbitControls, Environment } from '@react-three/drei';
 import { useNavigate } from 'react-router-dom';
-import Mp3PlayerModel from './Mp3PlayerModel';
+import Mp3PlayerModel, { FallbackPlayer } from './Mp3PlayerModel';
 import LastFmDashboard from './LastFmDashboard';
 import CdMockupGenerator from './CdMockupGenerator';
+import { ModelErrorBoundary } from '../ModelErrorBoundary';
 import { useLastFmData } from './hooks/useLastFmData';
 
 const MP3_MODEL_PATH = '/models/mp3player.glb';
@@ -23,12 +24,14 @@ export default function Mp3StatsPage() {
             <directionalLight position={[3, 5, 3]} intensity={0.8} />
             <pointLight position={[-2, 3, -2]} intensity={0.4} color="#a78bfa" />
 
-            <Suspense fallback={null}>
-              <Mp3PlayerModel
-                modelPath={MP3_MODEL_PATH}
-                onClick={() => setShowDashboard(true)}
-              />
-            </Suspense>
+            <ModelErrorBoundary fallback={<FallbackPlayer onClick={() => setShowDashboard(true)} />}>
+              <Suspense fallback={<FallbackPlayer onClick={() => setShowDashboard(true)} />}>
+                <Mp3PlayerModel
+                  modelPath={MP3_MODEL_PATH}
+                  onClick={() => setShowDashboard(true)}
+                />
+              </Suspense>
+            </ModelErrorBoundary>
 
             <Environment preset="studio" />
             <OrbitControls enablePan={false} enableZoom={false} />

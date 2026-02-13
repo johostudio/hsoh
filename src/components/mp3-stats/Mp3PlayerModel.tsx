@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useRef, useState, useMemo } from 'react';
 import { useFrame } from '@react-three/fiber';
 import { useGLTF, Html } from '@react-three/drei';
 import type * as THREE from 'three';
@@ -11,7 +11,7 @@ interface Mp3PlayerModelProps {
   textures?: TexturePaths;
 }
 
-function FallbackPlayer({ onClick }: { onClick: () => void }) {
+export function FallbackPlayer({ onClick }: { onClick: () => void }) {
   const ref = useRef<THREE.Group>(null);
   const [hovered, setHovered] = useState(false);
 
@@ -60,35 +60,30 @@ function FallbackPlayer({ onClick }: { onClick: () => void }) {
 export default function Mp3PlayerModel({ modelPath, onClick, textures }: Mp3PlayerModelProps) {
   const ref = useRef<THREE.Group>(null);
   const [hovered, setHovered] = useState(false);
+  const { scene } = useGLTF(modelPath);
+  const clonedScene = useMemo(() => scene.clone(), [scene]);
+
+  useApplyTextures(clonedScene, textures);
 
   useFrame((_, delta) => {
     if (ref.current) ref.current.rotation.y += delta * 0.4;
   });
 
-  try {
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    const { scene } = useGLTF(modelPath);
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    useApplyTextures(scene, textures);
-
-    return (
-      <group>
-        <primitive
-          ref={ref}
-          object={scene}
-          onClick={onClick}
-          onPointerOver={() => setHovered(true)}
-          onPointerOut={() => setHovered(false)}
-          scale={hovered ? 1.05 : 1}
-        />
-        <Html center position={[0, -1.5, 0]}>
-          <span style={{ color: '#c4b5fd', fontSize: '12px', fontWeight: 600, whiteSpace: 'nowrap' }}>
-            Click for stats
-          </span>
-        </Html>
-      </group>
-    );
-  } catch {
-    return <FallbackPlayer onClick={onClick} />;
-  }
+  return (
+    <group>
+      <primitive
+        ref={ref}
+        object={clonedScene}
+        onClick={onClick}
+        onPointerOver={() => setHovered(true)}
+        onPointerOut={() => setHovered(false)}
+        scale={hovered ? 1.05 : 1}
+      />
+      <Html center position={[0, -1.5, 0]}>
+        <span style={{ color: '#c4b5fd', fontSize: '12px', fontWeight: 600, whiteSpace: 'nowrap' }}>
+          Click for stats
+        </span>
+      </Html>
+    </group>
+  );
 }

@@ -2,11 +2,12 @@ import { Suspense, useState, useCallback, useRef } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { OrbitControls, Environment } from '@react-three/drei';
 import { useNavigate } from 'react-router-dom';
-import GuitarModel from './GuitarModel';
+import GuitarModel, { FallbackGuitar } from './GuitarModel';
 import MidiPadInterface from './MidiPadInterface';
 import DrumsInterface from './DrumsInterface';
 import TempoControl from './TempoControl';
 import BeatVisualizationPlayback from './BeatVisualizationPlayback';
+import { ModelErrorBoundary } from '../ModelErrorBoundary';
 import { useAudioContext } from '../../hooks/useAudioContext';
 
 const GUITAR_MODEL_PATH = '/models/guitar.glb';
@@ -89,12 +90,14 @@ export default function StudioPage() {
               color="#f97316"
             />
 
-            <Suspense fallback={null}>
-              <GuitarModel
-                modelPath={GUITAR_MODEL_PATH}
-                onClick={handleEnterStudio}
-              />
-            </Suspense>
+            <ModelErrorBoundary fallback={<FallbackGuitar onClick={handleEnterStudio} />}>
+              <Suspense fallback={<FallbackGuitar onClick={handleEnterStudio} />}>
+                <GuitarModel
+                  modelPath={GUITAR_MODEL_PATH}
+                  onClick={handleEnterStudio}
+                />
+              </Suspense>
+            </ModelErrorBoundary>
 
             <Environment preset="sunset" />
             <OrbitControls enablePan={false} enableZoom={false} />

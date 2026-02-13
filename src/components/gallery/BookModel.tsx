@@ -64,7 +64,7 @@ export function FallbackBook({ onOpen }: { onOpen: () => void }) {
 export default function BookModel({ modelPath, onOpen, textures }: BookModelProps) {
   const ref = useRef<THREE.Group>(null);
   const [hovered, setHovered] = useState(false);
-  const { scene } = useGLTF(modelPath);
+  const { scene } = useGLTF(modelPath, 'https://www.gstatic.com/draco/versioned/decoders/1.5.7/');
   const clonedScene = useMemo(() => scene.clone(), [scene]);
 
   useApplyTextures(clonedScene, textures);

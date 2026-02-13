@@ -18,7 +18,7 @@ export default function RotatableModel({
   position = [0, 0, 0],
   textures,
 }: RotatableModelProps) {
-  const { scene } = useGLTF(modelPath);
+  const { scene } = useGLTF(modelPath, 'https://www.gstatic.com/draco/versioned/decoders/1.5.7/');
   const clonedScene = useMemo(() => scene.clone(), [scene]);
   const meshRef = useRef<THREE.Group>(null);
 

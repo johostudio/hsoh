@@ -60,7 +60,7 @@ export function FallbackPlayer({ onClick }: { onClick: () => void }) {
 export default function Mp3PlayerModel({ modelPath, onClick, textures }: Mp3PlayerModelProps) {
   const ref = useRef<THREE.Group>(null);
   const [hovered, setHovered] = useState(false);
-  const { scene } = useGLTF(modelPath);
+  const { scene } = useGLTF(modelPath, 'https://www.gstatic.com/draco/versioned/decoders/1.5.7/');
   const clonedScene = useMemo(() => scene.clone(), [scene]);
 
   useApplyTextures(clonedScene, textures);

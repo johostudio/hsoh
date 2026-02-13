@@ -30,19 +30,21 @@ export default function LastFmDashboard() {
           placeholder="Last.fm username..."
           value={usernameInput}
           onChange={(e) => setUsernameInput(e.target.value)}
-          className="flex-1 px-4 py-2.5 bg-white/5 border border-white/10 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-indigo-500 transition"
+          className="flex-1 px-4 py-2.5 rounded-xl focus:outline-none transition"
+          style={{ backgroundColor: 'rgba(45,24,16,0.05)', border: '1px solid rgba(45,24,16,0.1)', color: '#2d1810' }}
         />
         <button
           type="submit"
           disabled={loading}
-          className="px-6 py-2.5 bg-indigo-600 text-white rounded-xl font-medium hover:bg-indigo-500 disabled:opacity-50 transition cursor-pointer"
+          className="px-6 py-2.5 rounded-xl font-medium disabled:opacity-50 transition cursor-pointer"
+          style={{ backgroundColor: '#2d1810', color: '#f5f0eb' }}
         >
           {loading ? 'Loading...' : 'Fetch'}
         </button>
       </form>
 
       {error && (
-        <div className="p-4 bg-red-500/10 border border-red-500/30 rounded-xl text-red-400 text-sm">
+        <div className="p-4 rounded-xl text-sm" style={{ backgroundColor: 'rgba(220,38,38,0.08)', border: '1px solid rgba(220,38,38,0.2)', color: '#b91c1c' }}>
           {error}
         </div>
       )}
@@ -54,11 +56,12 @@ export default function LastFmDashboard() {
             <button
               key={p.value}
               onClick={() => setPeriod(p.value)}
-              className={`px-4 py-1.5 rounded-full text-sm font-medium transition cursor-pointer ${
+              className="px-4 py-1.5 rounded-full text-sm font-medium transition cursor-pointer"
+              style={
                 period === p.value
-                  ? 'bg-indigo-600 text-white'
-                  : 'bg-white/5 text-gray-400 hover:bg-white/10'
-              }`}
+                  ? { backgroundColor: '#2d1810', color: '#f5f0eb' }
+                  : { backgroundColor: 'rgba(45,24,16,0.05)', color: 'rgba(45,24,16,0.6)' }
+              }
             >
               {p.label}
             </button>
@@ -68,7 +71,7 @@ export default function LastFmDashboard() {
 
       {/* User info banner */}
       {userInfo && (
-        <div className="flex items-center gap-4 p-4 bg-white/5 rounded-xl">
+        <div className="flex items-center gap-4 p-4 rounded-xl" style={{ backgroundColor: 'rgba(45,24,16,0.05)' }}>
           {userInfo.user.image?.[2]?.['#text'] && (
             <img
               src={userInfo.user.image[2]['#text']}
@@ -77,8 +80,8 @@ export default function LastFmDashboard() {
             />
           )}
           <div>
-            <h2 className="text-white text-lg font-bold">{userInfo.user.name}</h2>
-            <p className="text-gray-400 text-sm">
+            <h2 className="text-lg font-bold" style={{ color: '#2d1810' }}>{userInfo.user.name}</h2>
+            <p className="text-sm" style={{ color: 'rgba(45,24,16,0.5)' }}>
               {Number(userInfo.user.playcount).toLocaleString()} total scrobbles
             </p>
           </div>
@@ -89,12 +92,12 @@ export default function LastFmDashboard() {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* Top Artists */}
         {topArtists.length > 0 && (
-          <div className="bg-white/5 rounded-xl p-5">
-            <h3 className="text-white font-bold mb-4">Top Artists</h3>
+          <div className="rounded-xl p-5" style={{ backgroundColor: 'rgba(45,24,16,0.05)' }}>
+            <h3 className="font-bold mb-4" style={{ color: '#2d1810' }}>Top Artists</h3>
             <ol className="space-y-2">
               {topArtists.map((artist, i) => (
                 <li key={artist.name} className="flex items-center gap-3">
-                  <span className="text-indigo-400 font-mono text-sm w-6 text-right">
+                  <span className="font-mono text-sm w-6 text-right" style={{ color: 'rgba(45,24,16,0.4)' }}>
                     {i + 1}
                   </span>
                   {artist.image?.[0]?.['#text'] && (
@@ -109,12 +112,13 @@ export default function LastFmDashboard() {
                       href={artist.url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-white text-sm font-medium hover:text-indigo-400 transition truncate block"
+                      className="text-sm font-medium transition truncate block"
+                      style={{ color: '#2d1810' }}
                     >
                       {artist.name}
                     </a>
                   </div>
-                  <span className="text-gray-500 text-xs">
+                  <span className="text-xs" style={{ color: 'rgba(45,24,16,0.4)' }}>
                     {Number(artist.playcount).toLocaleString()} plays
                   </span>
                 </li>
@@ -125,12 +129,12 @@ export default function LastFmDashboard() {
 
         {/* Top Tracks */}
         {topTracks.length > 0 && (
-          <div className="bg-white/5 rounded-xl p-5">
-            <h3 className="text-white font-bold mb-4">Top Tracks</h3>
+          <div className="rounded-xl p-5" style={{ backgroundColor: 'rgba(45,24,16,0.05)' }}>
+            <h3 className="font-bold mb-4" style={{ color: '#2d1810' }}>Top Tracks</h3>
             <ol className="space-y-2">
               {topTracks.map((track, i) => (
                 <li key={`${track.artist.name}-${track.name}`} className="flex items-center gap-3">
-                  <span className="text-indigo-400 font-mono text-sm w-6 text-right">
+                  <span className="font-mono text-sm w-6 text-right" style={{ color: 'rgba(45,24,16,0.4)' }}>
                     {i + 1}
                   </span>
                   <div className="flex-1 min-w-0">
@@ -138,13 +142,14 @@ export default function LastFmDashboard() {
                       href={track.url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-white text-sm font-medium hover:text-indigo-400 transition truncate block"
+                      className="text-sm font-medium transition truncate block"
+                      style={{ color: '#2d1810' }}
                     >
                       {track.name}
                     </a>
-                    <span className="text-gray-500 text-xs">{track.artist.name}</span>
+                    <span className="text-xs" style={{ color: 'rgba(45,24,16,0.4)' }}>{track.artist.name}</span>
                   </div>
-                  <span className="text-gray-500 text-xs">
+                  <span className="text-xs" style={{ color: 'rgba(45,24,16,0.4)' }}>
                     {Number(track.playcount).toLocaleString()} plays
                   </span>
                 </li>

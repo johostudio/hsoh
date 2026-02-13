@@ -192,7 +192,7 @@ export default function DrumsInterface({ dest }: DrumsInterfaceProps) {
 
   return (
     <div>
-      <h3 className="text-white font-bold mb-3 text-sm uppercase tracking-wider">
+      <h3 className="font-bold mb-3 text-sm uppercase tracking-wider" style={{ color: '#2d1810' }}>
         Drum Kit
       </h3>
       <div className="grid grid-cols-3 gap-3">

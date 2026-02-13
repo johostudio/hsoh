@@ -55,7 +55,7 @@ export function FallbackGuitar({ onClick }: { onClick: () => void }) {
         <meshStandardMaterial color="#1c1917" />
       </mesh>
       <Html center position={[0, -1.5, 0]}>
-        <span style={{ color: '#fdba74', fontSize: '12px', fontWeight: 600, whiteSpace: 'nowrap' }}>
+        <span style={{ color: '#2d1810', fontSize: '12px', fontWeight: 600, whiteSpace: 'nowrap', fontFamily: 'Helvetica Neue, Helvetica, Arial, sans-serif' }}>
           Click to enter studio
         </span>
       </Html>
@@ -83,10 +83,10 @@ export default function GuitarModel({ modelPath, onClick, textures }: GuitarMode
         onClick={onClick}
         onPointerOver={() => setHovered(true)}
         onPointerOut={() => setHovered(false)}
-        scale={hovered ? 1.05 : 1}
+        scale={hovered ? 2.65 : 2.5}
       />
-      <Html center position={[0, -2, 0]}>
-        <span style={{ color: '#fdba74', fontSize: '12px', fontWeight: 600, whiteSpace: 'nowrap' }}>
+      <Html center position={[0, -4, 0]}>
+        <span style={{ color: '#2d1810', fontSize: '12px', fontWeight: 600, whiteSpace: 'nowrap', fontFamily: 'Helvetica Neue, Helvetica, Arial, sans-serif' }}>
           Click to enter studio
         </span>
       </Html>

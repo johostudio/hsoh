@@ -16,13 +16,50 @@ export default function Mp3StatsPage() {
   const { topArtists, topTracks, userInfo, period } = useLastFmData();
 
   return (
-    <div className="relative w-full h-screen flex flex-col overflow-auto">
+    <div className="relative w-full h-screen flex flex-col" style={{ background: '#f5f0eb' }}>
+      {/* Navigation - top right */}
+      <nav className="absolute top-8 right-10 z-10 flex flex-col items-end gap-1">
+        {[
+          { path: '/landing', label: 'Home' },
+          { path: '/gallery', label: 'Gallery' },
+          { path: '/mp3-stats', label: 'Stats' },
+          { path: '/studio', label: 'Studio' },
+        ].map((item) => (
+          <button
+            key={item.path}
+            onClick={() => navigate(item.path)}
+            className="text-sm font-medium tracking-wide transition-all cursor-pointer hover:opacity-60"
+            style={{
+              color: '#2d1810',
+              background: 'none',
+              border: 'none',
+              padding: '2px 0',
+              textDecoration: item.path === '/mp3-stats' ? 'underline' : 'none',
+              textUnderlineOffset: '4px',
+              textDecorationStyle: item.path === '/mp3-stats' ? 'dotted' : undefined,
+            }}
+          >
+            {item.label}
+          </button>
+        ))}
+      </nav>
+
+      {/* Page title */}
+      <div className="absolute top-6 left-8 z-10 pointer-events-none select-none">
+        <h1
+          className="font-bold uppercase leading-[0.85] tracking-[-0.04em]"
+          style={{ color: '#2d1810', fontSize: 'clamp(2.5rem, 8vw, 7rem)' }}
+        >
+          STATS
+        </h1>
+      </div>
+
       {!showDashboard ? (
         <div className="flex-1">
-          <Canvas camera={{ position: [0, 1, 4], fov: 45 }}>
-            <ambientLight intensity={0.5} />
-            <directionalLight position={[3, 5, 3]} intensity={0.8} />
-            <pointLight position={[-2, 3, -2]} intensity={0.4} color="#a78bfa" />
+          <Canvas camera={{ position: [0, 1, 5], fov: 45 }}>
+            <ambientLight intensity={0.6} />
+            <directionalLight position={[3, 5, 3]} intensity={1} />
+            <pointLight position={[-2, 3, -2]} intensity={0.4} color="#c4a882" />
 
             <ModelErrorBoundary fallback={<FallbackPlayer onClick={() => setShowDashboard(true)} />}>
               <Suspense fallback={<FallbackPlayer onClick={() => setShowDashboard(true)} />}>
@@ -38,10 +75,9 @@ export default function Mp3StatsPage() {
           </Canvas>
         </div>
       ) : (
-        <div className="flex-1 overflow-auto py-8 bg-gradient-to-b from-gray-950 to-gray-900">
+        <div className="flex-1 overflow-auto py-8 pt-24">
           <LastFmDashboard />
 
-          {/* CD Mockup */}
           <div className="mt-8">
             <CdMockupGenerator
               artists={topArtists}
@@ -53,29 +89,18 @@ export default function Mp3StatsPage() {
         </div>
       )}
 
-      {/* Navigation */}
-      <nav className="absolute bottom-8 left-1/2 -translate-x-1/2 flex gap-4 z-10">
-        <button
-          onClick={() =>
-            showDashboard ? setShowDashboard(false) : navigate('/landing')
-          }
-          className="px-6 py-2.5 bg-white/10 backdrop-blur-md border border-white/20 rounded-full text-white text-sm font-medium hover:bg-white/20 transition-all cursor-pointer"
-        >
-          {showDashboard ? 'Back to Player' : 'Home'}
-        </button>
-        {[
-          { path: '/gallery', label: 'Gallery' },
-          { path: '/studio', label: 'Studio' },
-        ].map((item) => (
+      {/* Bottom action */}
+      {showDashboard && (
+        <div className="absolute bottom-8 left-8 z-10">
           <button
-            key={item.path}
-            onClick={() => navigate(item.path)}
-            className="px-6 py-2.5 bg-white/10 backdrop-blur-md border border-white/20 rounded-full text-white text-sm font-medium hover:bg-white/20 transition-all cursor-pointer"
+            onClick={() => setShowDashboard(false)}
+            className="text-sm font-medium tracking-wide cursor-pointer hover:opacity-60 transition"
+            style={{ color: '#2d1810', background: 'none', border: 'none', textDecoration: 'underline', textUnderlineOffset: '4px' }}
           >
-            {item.label}
+            Back to Player
           </button>
-        ))}
-      </nav>
+        </div>
+      )}
     </div>
   );
 }

@@ -17,7 +17,7 @@ export default function FilmStillCarousel({
 
   if (stills.length === 0) {
     return (
-      <div className="flex items-center justify-center h-full text-gray-500">
+      <div className="flex items-center justify-center h-full" style={{ color: 'rgba(45,24,16,0.5)' }}>
         No film stills available
       </div>
     );
@@ -33,23 +33,25 @@ export default function FilmStillCarousel({
           className="w-full h-full object-cover cursor-pointer transition-transform duration-300 hover:scale-105"
           onClick={() => onSelect(current)}
         />
-        <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-4">
+        <div className="absolute bottom-0 left-0 right-0 p-4" style={{ background: 'linear-gradient(to top, rgba(45,24,16,0.7), transparent)' }}>
           <h3 className="text-white font-semibold">{stills[current].title}</h3>
           {stills[current].description && (
-            <p className="text-gray-300 text-sm">{stills[current].description}</p>
+            <p className="text-white/80 text-sm">{stills[current].description}</p>
           )}
         </div>
 
         {/* Nav arrows */}
         <button
           onClick={(e) => { e.stopPropagation(); prev(); }}
-          className="absolute left-3 top-1/2 -translate-y-1/2 w-10 h-10 bg-black/50 text-white rounded-full flex items-center justify-center hover:bg-black/70 transition cursor-pointer"
+          className="absolute left-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full flex items-center justify-center transition cursor-pointer"
+          style={{ backgroundColor: 'rgba(45,24,16,0.5)', color: '#f5f0eb' }}
         >
           &#8249;
         </button>
         <button
           onClick={(e) => { e.stopPropagation(); next(); }}
-          className="absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 bg-black/50 text-white rounded-full flex items-center justify-center hover:bg-black/70 transition cursor-pointer"
+          className="absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full flex items-center justify-center transition cursor-pointer"
+          style={{ backgroundColor: 'rgba(45,24,16,0.5)', color: '#f5f0eb' }}
         >
           &#8250;
         </button>
@@ -62,8 +64,9 @@ export default function FilmStillCarousel({
             key={i}
             onClick={() => setCurrent(i)}
             className={`shrink-0 w-20 h-14 rounded-lg overflow-hidden border-2 transition cursor-pointer ${
-              i === current ? 'border-indigo-500' : 'border-transparent opacity-60 hover:opacity-100'
+              i === current ? 'opacity-100' : 'border-transparent opacity-60 hover:opacity-100'
             }`}
+            style={i === current ? { borderColor: '#2d1810' } : undefined}
           >
             <img
               src={still.src}

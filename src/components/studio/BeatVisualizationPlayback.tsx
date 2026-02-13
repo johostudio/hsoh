@@ -71,9 +71,9 @@ function InactiveVisualizer() {
     <mesh ref={meshRef}>
       <torusKnotGeometry args={[1, 0.3, 128, 32]} />
       <meshStandardMaterial
-        color="#4f46e5"
+        color="#8b7355"
         wireframe
-        emissive="#4338ca"
+        emissive="#6b5842"
         emissiveIntensity={0.2}
       />
     </mesh>
@@ -85,7 +85,7 @@ export default function BeatVisualizationPlayback({
   isActive,
 }: BeatVisualizationPlaybackProps) {
   return (
-    <div className="w-full h-64 rounded-xl overflow-hidden border border-white/10">
+    <div className="w-full h-64 rounded-xl overflow-hidden" style={{ border: '1px solid rgba(45,24,16,0.1)' }}>
       <Canvas camera={{ position: [0, 2, 5], fov: 50 }}>
         <ambientLight intensity={0.3} />
         <pointLight position={[0, 5, 0]} intensity={1} color="#818cf8" />

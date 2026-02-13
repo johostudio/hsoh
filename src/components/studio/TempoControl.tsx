@@ -163,13 +163,13 @@ export default function TempoControl({ dest }: TempoControlProps) {
 
   return (
     <div>
-      <h3 className="text-white font-bold mb-3 text-sm uppercase tracking-wider">
+      <h3 className="font-bold mb-3 text-sm uppercase tracking-wider" style={{ color: '#2d1810' }}>
         Step Sequencer
       </h3>
 
       {/* BPM control */}
       <div className="flex items-center gap-4 mb-4">
-        <label className="text-gray-400 text-sm">BPM</label>
+        <label className="text-sm" style={{ color: 'rgba(45,24,16,0.5)' }}>BPM</label>
         <input
           type="range"
           min={60}
@@ -180,7 +180,7 @@ export default function TempoControl({ dest }: TempoControlProps) {
           }
           className="flex-1"
         />
-        <span className="text-indigo-400 font-mono text-sm w-10 text-right">
+        <span className="font-mono text-sm w-10 text-right" style={{ color: '#2d1810' }}>
           {settings.bpm}
         </span>
 
@@ -200,7 +200,7 @@ export default function TempoControl({ dest }: TempoControlProps) {
       <div className="space-y-1 overflow-x-auto">
         {INSTRUMENTS.map((inst) => (
           <div key={inst.id} className="flex items-center gap-1">
-            <span className="text-gray-400 text-xs w-12 shrink-0 text-right pr-2">
+            <span className="text-xs w-12 shrink-0 text-right pr-2" style={{ color: 'rgba(45,24,16,0.5)' }}>
               {inst.label}
             </span>
             {grid.map((step, stepIdx) => (
@@ -208,14 +208,15 @@ export default function TempoControl({ dest }: TempoControlProps) {
                 key={stepIdx}
                 onClick={() => toggleStep(stepIdx, inst.id)}
                 className={`w-6 h-6 rounded-sm transition-all duration-75 cursor-pointer shrink-0 ${
-                  stepIdx === currentStep ? 'ring-2 ring-white/50' : ''
+                  stepIdx === currentStep ? 'ring-2' : ''
                 } ${stepIdx % 4 === 0 ? 'ml-1' : ''}`}
                 style={{
                   backgroundColor: step[inst.id]
                     ? inst.color
                     : stepIdx === currentStep
-                      ? 'rgba(255,255,255,0.1)'
-                      : 'rgba(255,255,255,0.05)',
+                      ? 'rgba(45,24,16,0.12)'
+                      : 'rgba(45,24,16,0.06)',
+                  ...(stepIdx === currentStep ? { '--tw-ring-color': 'rgba(45,24,16,0.3)' } as React.CSSProperties : {}),
                 }}
               />
             ))}

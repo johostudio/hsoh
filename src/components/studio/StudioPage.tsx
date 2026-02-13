@@ -76,18 +76,54 @@ export default function StudioPage() {
   }, []);
 
   return (
-    <div className="relative w-full h-screen flex flex-col">
+    <div className="relative w-full h-screen flex flex-col" style={{ background: '#f5f0eb' }}>
+      {/* Navigation - top right */}
+      <nav className="absolute top-8 right-10 z-10 flex flex-col items-end gap-1">
+        {[
+          { path: '/landing', label: 'Home' },
+          { path: '/gallery', label: 'Gallery' },
+          { path: '/mp3-stats', label: 'Stats' },
+          { path: '/studio', label: 'Studio' },
+        ].map((item) => (
+          <button
+            key={item.path}
+            onClick={() => navigate(item.path)}
+            className="text-sm font-medium tracking-wide transition-all cursor-pointer hover:opacity-60"
+            style={{
+              color: '#2d1810',
+              background: 'none',
+              border: 'none',
+              padding: '2px 0',
+              textDecoration: item.path === '/studio' ? 'underline' : 'none',
+              textUnderlineOffset: '4px',
+              textDecorationStyle: item.path === '/studio' ? 'dotted' : undefined,
+            }}
+          >
+            {item.label}
+          </button>
+        ))}
+      </nav>
+
+      {/* Page title */}
+      <div className="absolute top-6 left-8 z-10 pointer-events-none select-none">
+        <h1
+          className="font-bold uppercase leading-[0.85] tracking-[-0.04em]"
+          style={{ color: '#2d1810', fontSize: 'clamp(2.5rem, 8vw, 7rem)' }}
+        >
+          STUDIO
+        </h1>
+      </div>
+
       {!showStudio ? (
-        /* Guitar model view */
         <div className="flex-1">
-          <Canvas camera={{ position: [0, 1.5, 4], fov: 45 }}>
-            <ambientLight intensity={0.5} />
-            <directionalLight position={[3, 5, 3]} intensity={0.8} />
+          <Canvas camera={{ position: [0, 1.5, 5], fov: 45 }}>
+            <ambientLight intensity={0.6} />
+            <directionalLight position={[3, 5, 3]} intensity={1} />
             <spotLight
               position={[-3, 5, 0]}
               intensity={0.5}
               angle={0.4}
-              color="#f97316"
+              color="#c4a882"
             />
 
             <ModelErrorBoundary fallback={<FallbackGuitar onClick={handleEnterStudio} />}>
@@ -104,12 +140,11 @@ export default function StudioPage() {
           </Canvas>
         </div>
       ) : (
-        /* Studio interface */
-        <div className="flex-1 overflow-auto bg-gradient-to-b from-gray-950 to-gray-900 p-6">
+        <div className="flex-1 overflow-auto p-6 pt-24">
           <div className="max-w-6xl mx-auto space-y-6">
             {/* Recording controls */}
-            <div className="flex items-center gap-4 p-4 bg-white/5 rounded-xl">
-              <h2 className="text-white font-bold text-lg flex-1">Studio</h2>
+            <div className="flex items-center gap-4 p-4 rounded-xl" style={{ background: 'rgba(45,24,16,0.05)', border: '1px solid rgba(45,24,16,0.1)' }}>
+              <h2 className="font-bold text-lg flex-1" style={{ color: '#2d1810' }}>Studio</h2>
               <button
                 onClick={isRecording ? stopRecording : startRecording}
                 className={`px-5 py-2 rounded-lg font-bold text-sm transition cursor-pointer ${
@@ -118,13 +153,14 @@ export default function StudioPage() {
                     : 'bg-red-700 hover:bg-red-600 text-white'
                 }`}
               >
-                {isRecording ? '⏹ Stop Recording' : '⏺ Record'}
+                {isRecording ? 'Stop Recording' : 'Record'}
               </button>
               {downloadUrl && (
                 <a
                   href={downloadUrl}
                   download="beat.webm"
-                  className="px-5 py-2 bg-indigo-600 hover:bg-indigo-500 text-white rounded-lg font-bold text-sm transition"
+                  className="px-5 py-2 text-white rounded-lg font-bold text-sm transition"
+                  style={{ background: '#2d1810' }}
                 >
                   Download
                 </a>
@@ -139,45 +175,34 @@ export default function StudioPage() {
 
             {/* Instruments grid */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              <div className="bg-white/5 rounded-xl p-5">
+              <div className="rounded-xl p-5" style={{ background: 'rgba(45,24,16,0.05)', border: '1px solid rgba(45,24,16,0.1)' }}>
                 <MidiPadInterface dest={dest} />
               </div>
-              <div className="bg-white/5 rounded-xl p-5">
+              <div className="rounded-xl p-5" style={{ background: 'rgba(45,24,16,0.05)', border: '1px solid rgba(45,24,16,0.1)' }}>
                 <DrumsInterface dest={dest} />
               </div>
             </div>
 
             {/* Step sequencer */}
-            <div className="bg-white/5 rounded-xl p-5">
+            <div className="rounded-xl p-5" style={{ background: 'rgba(45,24,16,0.05)', border: '1px solid rgba(45,24,16,0.1)' }}>
               <TempoControl dest={dest} />
             </div>
           </div>
         </div>
       )}
 
-      {/* Navigation */}
-      <nav className="absolute bottom-8 left-1/2 -translate-x-1/2 flex gap-4 z-10">
-        <button
-          onClick={() =>
-            showStudio ? setShowStudio(false) : navigate('/landing')
-          }
-          className="px-6 py-2.5 bg-white/10 backdrop-blur-md border border-white/20 rounded-full text-white text-sm font-medium hover:bg-white/20 transition-all cursor-pointer"
-        >
-          {showStudio ? 'Back to Guitar' : 'Home'}
-        </button>
-        {[
-          { path: '/gallery', label: 'Gallery' },
-          { path: '/mp3-stats', label: 'MP3 / Stats' },
-        ].map((item) => (
+      {/* Bottom action */}
+      {showStudio && (
+        <div className="absolute bottom-8 left-8 z-10">
           <button
-            key={item.path}
-            onClick={() => navigate(item.path)}
-            className="px-6 py-2.5 bg-white/10 backdrop-blur-md border border-white/20 rounded-full text-white text-sm font-medium hover:bg-white/20 transition-all cursor-pointer"
+            onClick={() => setShowStudio(false)}
+            className="text-sm font-medium tracking-wide cursor-pointer hover:opacity-60 transition"
+            style={{ color: '#2d1810', background: 'none', border: 'none', textDecoration: 'underline', textUnderlineOffset: '4px' }}
           >
-            {item.label}
+            Back to Guitar
           </button>
-        ))}
-      </nav>
+        </div>
+      )}
     </div>
   );
 }

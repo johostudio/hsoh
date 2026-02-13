@@ -26,13 +26,49 @@ export default function GalleryPage() {
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
 
   return (
-    <div className="relative w-full h-screen flex flex-col">
+    <div className="relative w-full h-screen flex flex-col" style={{ background: '#f5f0eb' }}>
+      {/* Navigation - top right */}
+      <nav className="absolute top-8 right-10 z-10 flex flex-col items-end gap-1">
+        {[
+          { path: '/landing', label: 'Home' },
+          { path: '/gallery', label: 'Gallery' },
+          { path: '/mp3-stats', label: 'Stats' },
+          { path: '/studio', label: 'Studio' },
+        ].map((item) => (
+          <button
+            key={item.path}
+            onClick={() => navigate(item.path)}
+            className="text-sm font-medium tracking-wide transition-all cursor-pointer hover:opacity-60"
+            style={{
+              color: '#2d1810',
+              background: 'none',
+              border: 'none',
+              padding: '2px 0',
+              textDecoration: item.path === '/gallery' ? 'underline' : 'none',
+              textUnderlineOffset: '4px',
+              textDecorationStyle: item.path === '/gallery' ? 'dotted' : undefined,
+            }}
+          >
+            {item.label}
+          </button>
+        ))}
+      </nav>
+
+      {/* Page title */}
+      <div className="absolute top-6 left-8 z-10 pointer-events-none select-none">
+        <h1
+          className="font-bold uppercase leading-[0.85] tracking-[-0.04em]"
+          style={{ color: '#2d1810', fontSize: 'clamp(2.5rem, 8vw, 7rem)' }}
+        >
+          GALLERY
+        </h1>
+      </div>
+
       {!showGallery ? (
-        /* Book model view */
         <div className="flex-1">
-          <Canvas camera={{ position: [0, 1, 4], fov: 45 }}>
-            <ambientLight intensity={0.5} />
-            <directionalLight position={[3, 5, 3]} intensity={0.8} />
+          <Canvas camera={{ position: [0, 1, 5], fov: 45 }}>
+            <ambientLight intensity={0.6} />
+            <directionalLight position={[3, 5, 3]} intensity={1} />
             <spotLight position={[0, 5, 0]} intensity={0.5} angle={0.4} />
 
             <ModelErrorBoundary fallback={<FallbackBook onOpen={() => setShowGallery(true)} />}>
@@ -49,8 +85,7 @@ export default function GalleryPage() {
           </Canvas>
         </div>
       ) : (
-        /* Film stills gallery */
-        <div className="flex-1 flex items-center justify-center p-8 bg-gradient-to-b from-gray-950 to-gray-900">
+        <div className="flex-1 flex items-center justify-center p-8 pt-24">
           <FilmStillCarousel
             stills={FILM_STILLS}
             onSelect={(index) => setLightboxIndex(index)}
@@ -75,29 +110,18 @@ export default function GalleryPage() {
         />
       )}
 
-      {/* Navigation */}
-      <nav className="absolute bottom-8 left-1/2 -translate-x-1/2 flex gap-4 z-10">
-        <button
-          onClick={() =>
-            showGallery ? setShowGallery(false) : navigate('/landing')
-          }
-          className="px-6 py-2.5 bg-white/10 backdrop-blur-md border border-white/20 rounded-full text-white text-sm font-medium hover:bg-white/20 transition-all cursor-pointer"
-        >
-          {showGallery ? 'Back to Book' : 'Home'}
-        </button>
-        {[
-          { path: '/mp3-stats', label: 'MP3 / Stats' },
-          { path: '/studio', label: 'Studio' },
-        ].map((item) => (
+      {/* Bottom action */}
+      {showGallery && (
+        <div className="absolute bottom-8 left-8 z-10">
           <button
-            key={item.path}
-            onClick={() => navigate(item.path)}
-            className="px-6 py-2.5 bg-white/10 backdrop-blur-md border border-white/20 rounded-full text-white text-sm font-medium hover:bg-white/20 transition-all cursor-pointer"
+            onClick={() => setShowGallery(false)}
+            className="text-sm font-medium tracking-wide cursor-pointer hover:opacity-60 transition"
+            style={{ color: '#2d1810', background: 'none', border: 'none', textDecoration: 'underline', textUnderlineOffset: '4px' }}
           >
-            {item.label}
+            Back to Model
           </button>
-        ))}
-      </nav>
+        </div>
+      )}
     </div>
   );
 }

@@ -54,7 +54,7 @@ export default function MidiPadInterface({ dest }: MidiPadInterfaceProps) {
 
   return (
     <div>
-      <h3 className="text-white font-bold mb-3 text-sm uppercase tracking-wider">
+      <h3 className="font-bold mb-3 text-sm uppercase tracking-wider" style={{ color: '#2d1810' }}>
         MIDI Pads
       </h3>
       <div className="grid grid-cols-4 gap-2">

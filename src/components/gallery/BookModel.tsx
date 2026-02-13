@@ -47,10 +47,11 @@ export function FallbackBook({ onOpen }: { onOpen: () => void }) {
       <Html center position={[0, -1.4, 0]}>
         <span
           style={{
-            color: '#a5b4fc',
+            color: '#2d1810',
             fontSize: '12px',
             fontWeight: 600,
             whiteSpace: 'nowrap',
+            fontFamily: 'Helvetica Neue, Helvetica, Arial, sans-serif',
           }}
         >
           Click to explore
@@ -82,15 +83,16 @@ export default function BookModel({ modelPath, onOpen, textures }: BookModelProp
         onClick={onOpen}
         onPointerOver={() => setHovered(true)}
         onPointerOut={() => setHovered(false)}
-        scale={hovered ? 1.05 : 1}
+        scale={hovered ? 2.65 : 2.5}
       />
-      <Html center position={[0, -1.8, 0]}>
+      <Html center position={[0, -3.5, 0]}>
         <span
           style={{
-            color: '#a5b4fc',
+            color: '#2d1810',
             fontSize: '12px',
             fontWeight: 600,
             whiteSpace: 'nowrap',
+            fontFamily: 'Helvetica Neue, Helvetica, Arial, sans-serif',
           }}
         >
           Click to explore

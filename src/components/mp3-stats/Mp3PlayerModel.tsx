@@ -49,7 +49,7 @@ export function FallbackPlayer({ onClick }: { onClick: () => void }) {
         <meshStandardMaterial color="#1e1b4b" metalness={0.8} roughness={0.2} />
       </mesh>
       <Html center position={[0, -1.2, 0]}>
-        <span style={{ color: '#c4b5fd', fontSize: '12px', fontWeight: 600, whiteSpace: 'nowrap' }}>
+        <span style={{ color: '#2d1810', fontSize: '12px', fontWeight: 600, whiteSpace: 'nowrap', fontFamily: 'Helvetica Neue, Helvetica, Arial, sans-serif' }}>
           Click for stats
         </span>
       </Html>
@@ -77,10 +77,10 @@ export default function Mp3PlayerModel({ modelPath, onClick, textures }: Mp3Play
         onClick={onClick}
         onPointerOver={() => setHovered(true)}
         onPointerOut={() => setHovered(false)}
-        scale={hovered ? 1.05 : 1}
+        scale={hovered ? 2.65 : 2.5}
       />
-      <Html center position={[0, -1.5, 0]}>
-        <span style={{ color: '#c4b5fd', fontSize: '12px', fontWeight: 600, whiteSpace: 'nowrap' }}>
+      <Html center position={[0, -3.5, 0]}>
+        <span style={{ color: '#2d1810', fontSize: '12px', fontWeight: 600, whiteSpace: 'nowrap', fontFamily: 'Helvetica Neue, Helvetica, Arial, sans-serif' }}>
           Click for stats
         </span>
       </Html>

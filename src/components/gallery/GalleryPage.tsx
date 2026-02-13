@@ -54,11 +54,11 @@ export default function GalleryPage() {
         ))}
       </nav>
 
-      {/* Page title */}
-      <div className="absolute top-6 left-8 z-10 pointer-events-none select-none">
+      {/* Page title - centered */}
+      <div className="absolute top-6 left-0 right-0 z-10 pointer-events-none select-none flex justify-center">
         <h1
           className="font-bold uppercase leading-[0.85] tracking-[-0.04em]"
-          style={{ color: '#2d1810', fontSize: 'clamp(2.5rem, 8vw, 7rem)' }}
+          style={{ color: '#2d1810', fontSize: 'clamp(2.5rem, 8vw, 7rem)', fontFamily: "'Helvetica Neue', Helvetica, Arial, sans-serif" }}
         >
           GALLERY
         </h1>

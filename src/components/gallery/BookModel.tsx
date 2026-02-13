@@ -83,9 +83,9 @@ export default function BookModel({ modelPath, onOpen, textures }: BookModelProp
         onClick={onOpen}
         onPointerOver={() => setHovered(true)}
         onPointerOut={() => setHovered(false)}
-        scale={hovered ? 2.65 : 2.5}
+        scale={hovered ? 1.6 : 1.5}
       />
-      <Html center position={[0, -3.5, 0]}>
+      <Html center position={[0, -2.2, 0]}>
         <span
           style={{
             color: '#2d1810',

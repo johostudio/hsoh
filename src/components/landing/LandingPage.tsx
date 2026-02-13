@@ -104,7 +104,7 @@ export default function LandingPage() {
 
           <ModelErrorBoundary fallback={<FallbackModel />}>
             <Suspense fallback={<FallbackModel />}>
-              <RotatableModel modelPath={MODEL_PATH} scale={3} textures={LANDING_TEXTURES} />
+              <RotatableModel modelPath={MODEL_PATH} scale={4.5} textures={LANDING_TEXTURES} />
             </Suspense>
           </ModelErrorBoundary>
 
@@ -134,17 +134,7 @@ export default function LandingPage() {
         </p>
       </div>
 
-      {/* Subtitle - bottom right */}
-      <div className="absolute bottom-6 right-0 z-10 pointer-events-none select-none text-right pr-10">
-        <h2
-          className="font-bold uppercase leading-[0.85] tracking-[-0.04em]"
-          style={{ color: '#2d1810', fontSize: 'clamp(3rem, 9vw, 9rem)' }}
-        >
-          OCCASIONAL
-          <br />
-          CREATIVE
-        </h2>
-      </div>
+
     </div>
   );
 }

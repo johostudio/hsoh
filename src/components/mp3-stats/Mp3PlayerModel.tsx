@@ -77,9 +77,9 @@ export default function Mp3PlayerModel({ modelPath, onClick, textures }: Mp3Play
         onClick={onClick}
         onPointerOver={() => setHovered(true)}
         onPointerOut={() => setHovered(false)}
-        scale={hovered ? 2.65 : 2.5}
+        scale={hovered ? 3.65 : 3.5}
       />
-      <Html center position={[0, -3.5, 0]}>
+      <Html center position={[0, -4.5, 0]}>
         <span style={{ color: '#2d1810', fontSize: '12px', fontWeight: 600, whiteSpace: 'nowrap', fontFamily: 'Helvetica Neue, Helvetica, Arial, sans-serif' }}>
           Click for stats
         </span>

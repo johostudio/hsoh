@@ -1,21 +1,20 @@
-import { Suspense, useState, useCallback, useRef } from 'react';
+import { Suspense, useState, useCallback, useRef, useEffect } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { OrbitControls, Environment } from '@react-three/drei';
 import { useNavigate } from 'react-router-dom';
-import GuitarModel, { FallbackGuitar } from './GuitarModel';
+import EightKeyPianoModel from './EightKeyPianoModel';
 import MidiPadInterface from './MidiPadInterface';
 import DrumsInterface from './DrumsInterface';
 import TempoControl from './TempoControl';
 import BeatVisualizationPlayback from './BeatVisualizationPlayback';
-import { ModelErrorBoundary } from '../ModelErrorBoundary';
 import { useAudioContext } from '../../hooks/useAudioContext';
-
-const GUITAR_MODEL_PATH = '/models/guitar.glb';
+import GridBackground from '../GridBackground';
 
 export default function StudioPage() {
   const navigate = useNavigate();
-  const { ensureResumed, getDest, getContext } = useAudioContext();
+  const { ensureResumed, getDest } = useAudioContext();
   const [showStudio, setShowStudio] = useState(false);
+  const [isAnimating, setIsAnimating] = useState(false);
   const [isRecording, setIsRecording] = useState(false);
   const [downloadUrl, setDownloadUrl] = useState<string | null>(null);
   const [analyser, setAnalyser] = useState<AnalyserNode | null>(null);
@@ -23,6 +22,7 @@ export default function StudioPage() {
 
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const chunksRef = useRef<BlobPart[]>([]);
+  const contentRef = useRef<HTMLDivElement>(null);
 
   const initAudio = useCallback(async () => {
     const ctx = await ensureResumed();
@@ -38,9 +38,39 @@ export default function StudioPage() {
   }, [ensureResumed, getDest]);
 
   const handleEnterStudio = useCallback(async () => {
-    await initAudio();
-    setShowStudio(true);
+    setIsAnimating(true);
+    try {
+      await initAudio();
+    } catch (e) {
+      console.warn('Audio init failed, entering studio anyway:', e);
+    }
+    setTimeout(() => {
+      setShowStudio(true);
+      setIsAnimating(false);
+    }, 300);
   }, [initAudio]);
+
+  const handleExitStudio = useCallback(() => {
+    setIsAnimating(true);
+    setTimeout(() => {
+      setShowStudio(false);
+      setIsAnimating(false);
+    }, 300);
+  }, []);
+
+  useEffect(() => {
+    if (showStudio && contentRef.current) {
+      contentRef.current.style.opacity = '0';
+      contentRef.current.style.transform = 'translateY(20px)';
+      requestAnimationFrame(() => {
+        if (contentRef.current) {
+          contentRef.current.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+          contentRef.current.style.opacity = '1';
+          contentRef.current.style.transform = 'translateY(0)';
+        }
+      });
+    }
+  }, [showStudio]);
 
   const startRecording = useCallback(async () => {
     const { dest: d } = await initAudio();
@@ -76,21 +106,23 @@ export default function StudioPage() {
   }, []);
 
   return (
-    <div className="relative w-full h-screen flex flex-col" style={{ background: '#f5f0eb' }}>
+    <div className="relative w-full h-screen overflow-hidden" style={{ background: '#0a0a0a' }}>
+      <GridBackground />
+
       {/* Navigation - top right */}
       <nav className="absolute top-8 right-10 z-10 flex flex-col items-end gap-1">
         {[
-          { path: '/landing', label: 'Home' },
-          { path: '/gallery', label: 'Gallery' },
-          { path: '/mp3-stats', label: 'Stats' },
-          { path: '/studio', label: 'Studio' },
+          { path: '/landing', label: 'home' },
+          { path: '/gallery', label: 'gallery' },
+          { path: '/mp3-stats', label: 'stats' },
+          { path: '/studio', label: 'studio' },
         ].map((item) => (
           <button
             key={item.path}
             onClick={() => navigate(item.path)}
-            className="text-sm font-medium tracking-wide transition-all cursor-pointer hover:opacity-60"
+            className="text-sm font-medium tracking-[-0.02em] transition-all cursor-pointer hover:opacity-60"
             style={{
-              color: '#2d1810',
+              color: '#ffffff',
               background: 'none',
               border: 'none',
               padding: '2px 0',
@@ -107,102 +139,129 @@ export default function StudioPage() {
       {/* Page title - centered */}
       <div className="absolute top-6 left-0 right-0 z-10 pointer-events-none select-none flex justify-center">
         <h1
-          className="font-bold uppercase leading-[0.85] tracking-[-0.04em]"
-          style={{ color: '#2d1810', fontSize: 'clamp(2.5rem, 8vw, 7rem)', fontFamily: "'Helvetica Neue', Helvetica, Arial, sans-serif" }}
+          className="font-bold lowercase leading-[0.85] tracking-[-0.06em]"
+          style={{ color: '#ffffff', fontSize: 'clamp(2.5rem, 8vw, 7rem)' }}
         >
-          STUDIO
+          studio
         </h1>
       </div>
 
       {!showStudio ? (
-        <div className="flex-1">
-          <Canvas camera={{ position: [0, 1, 6], fov: 45 }}>
-            <ambientLight intensity={0.6} />
-            <directionalLight position={[3, 5, 3]} intensity={1} />
+        <div
+          className="absolute left-0 right-0 bottom-0 z-[1]"
+          style={{
+            top: 'clamp(7rem, 14vw, 11rem)',
+            opacity: isAnimating ? 0 : 1,
+            transition: 'opacity 0.3s ease',
+          }}
+        >
+          <Canvas
+            camera={{ position: [0, 2, 5], fov: 45 }}
+            style={{ pointerEvents: 'auto' }}
+            events={undefined}
+          >
+            <ambientLight intensity={0.4} />
+            <directionalLight position={[3, 5, 3]} intensity={0.8} />
             <spotLight
               position={[-3, 5, 0]}
-              intensity={0.5}
+              intensity={0.4}
               angle={0.4}
-              color="#c4a882"
+              color="#6366f1"
             />
 
-            <ModelErrorBoundary fallback={<FallbackGuitar onClick={handleEnterStudio} />}>
-              <Suspense fallback={<FallbackGuitar onClick={handleEnterStudio} />}>
-                <GuitarModel
-                  modelPath={GUITAR_MODEL_PATH}
-                  onClick={handleEnterStudio}
-                />
-              </Suspense>
-            </ModelErrorBoundary>
+            <Suspense fallback={null}>
+              <EightKeyPianoModel onClick={handleEnterStudio} />
+            </Suspense>
 
-            <Environment preset="sunset" />
-            <OrbitControls enablePan={false} enableZoom={false} />
+            <Environment preset="night" />
+            <OrbitControls
+              enablePan={false}
+              enableZoom={false}
+              enableRotate={true}
+            />
           </Canvas>
         </div>
       ) : (
-        <div className="flex-1 overflow-auto p-6 pt-24">
-          <div className="max-w-6xl mx-auto space-y-6">
-            {/* Recording controls */}
-            <div className="flex items-center gap-4 p-4 rounded-xl" style={{ background: 'rgba(45,24,16,0.05)', border: '1px solid rgba(45,24,16,0.1)' }}>
-              <h2 className="font-bold text-lg flex-1" style={{ color: '#2d1810' }}>Studio</h2>
-              <button
-                onClick={isRecording ? stopRecording : startRecording}
-                className={`px-5 py-2 rounded-lg font-bold text-sm transition cursor-pointer ${
-                  isRecording
-                    ? 'bg-red-600 hover:bg-red-500 text-white animate-pulse'
-                    : 'bg-red-700 hover:bg-red-600 text-white'
-                }`}
-              >
-                {isRecording ? 'Stop Recording' : 'Record'}
-              </button>
-              {downloadUrl && (
-                <a
-                  href={downloadUrl}
-                  download="beat.webm"
-                  className="px-5 py-2 text-white rounded-lg font-bold text-sm transition"
-                  style={{ background: '#2d1810' }}
-                >
-                  Download
-                </a>
-              )}
-            </div>
-
+        <div
+          ref={contentRef}
+          className="absolute inset-0 z-[1] overflow-auto flex items-start justify-center pt-32 pb-24 px-6"
+        >
+          <div className="w-full max-w-xl space-y-5">
             {/* Visualization */}
             <BeatVisualizationPlayback
               analyser={analyser}
               isActive={isRecording || showStudio}
             />
 
-            {/* Instruments grid */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              <div className="rounded-xl p-5" style={{ background: 'rgba(45,24,16,0.05)', border: '1px solid rgba(45,24,16,0.1)' }}>
+            {/* Instruments -- centered, two columns */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="rounded-xl p-4" style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.06)' }}>
                 <MidiPadInterface dest={dest} />
               </div>
-              <div className="rounded-xl p-5" style={{ background: 'rgba(45,24,16,0.05)', border: '1px solid rgba(45,24,16,0.1)' }}>
+              <div className="rounded-xl p-4" style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.06)' }}>
                 <DrumsInterface dest={dest} />
               </div>
             </div>
 
             {/* Step sequencer */}
-            <div className="rounded-xl p-5" style={{ background: 'rgba(45,24,16,0.05)', border: '1px solid rgba(45,24,16,0.1)' }}>
+            <div className="rounded-xl p-4" style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.06)' }}>
               <TempoControl dest={dest} />
+            </div>
+
+            {/* Recording controls -- right below sequencer */}
+            <div className="flex items-center justify-center gap-6 pt-2">
+              <button
+                onClick={isRecording ? stopRecording : startRecording}
+                className="text-sm font-medium transition cursor-pointer hover:opacity-60"
+                style={{
+                  color: isRecording ? '#ef4444' : '#ffffff',
+                  background: 'none',
+                  border: 'none',
+                  padding: '4px 0',
+                  textDecoration: 'underline',
+                  textUnderlineOffset: '4px',
+                }}
+              >
+                {isRecording ? 'stop recording' : 'record'}
+              </button>
+              {downloadUrl && (
+                <a
+                  href={downloadUrl}
+                  download="beat.webm"
+                  className="text-sm font-medium transition hover:opacity-60"
+                  style={{
+                    color: '#ffffff',
+                    textDecoration: 'underline',
+                    textUnderlineOffset: '4px',
+                  }}
+                >
+                  download
+                </a>
+              )}
             </div>
           </div>
         </div>
       )}
 
-      {/* Bottom action */}
-      {showStudio && (
-        <div className="absolute bottom-8 left-8 z-10">
+      {/* Bottom text */}
+      <div className="absolute bottom-8 left-8 z-10">
+        {showStudio ? (
           <button
-            onClick={() => setShowStudio(false)}
+            onClick={handleExitStudio}
             className="text-sm font-medium tracking-wide cursor-pointer hover:opacity-60 transition"
-            style={{ color: '#2d1810', background: 'none', border: 'none', textDecoration: 'underline', textUnderlineOffset: '4px' }}
+            style={{ color: '#ffffff', background: 'none', border: 'none', textDecoration: 'underline', textUnderlineOffset: '4px' }}
           >
-            Back to Guitar
+            Back to Piano
           </button>
-        </div>
-      )}
+        ) : (
+          <p
+            className="text-xs uppercase tracking-[0.2em] leading-relaxed font-medium max-w-[200px] pointer-events-none select-none"
+            style={{ color: 'rgba(255,255,255,0.5)' }}
+          >
+            MAKE SOME NOISE
+          </p>
+        )}
+      </div>
     </div>
   );
 }

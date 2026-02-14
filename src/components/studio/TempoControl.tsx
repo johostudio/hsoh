@@ -138,7 +138,7 @@ export default function TempoControl({ dest }: TempoControlProps) {
       }
 
       step = (step + 1) % settings.steps;
-      const interval = (60 / settings.bpm / 4) * 1000; // 16th notes
+      const interval = (60 / settings.bpm / 4) * 1000;
       timerRef.current = window.setTimeout(tick, interval);
     };
 
@@ -163,13 +163,13 @@ export default function TempoControl({ dest }: TempoControlProps) {
 
   return (
     <div>
-      <h3 className="font-bold mb-3 text-sm uppercase tracking-wider" style={{ color: '#2d1810' }}>
+      <h3 className="font-bold mb-3 text-sm uppercase tracking-wider text-white">
         Step Sequencer
       </h3>
 
       {/* BPM control */}
       <div className="flex items-center gap-4 mb-4">
-        <label className="text-sm" style={{ color: 'rgba(45,24,16,0.5)' }}>BPM</label>
+        <label className="text-sm" style={{ color: 'rgba(255,255,255,0.5)' }}>BPM</label>
         <input
           type="range"
           min={60}
@@ -180,19 +180,23 @@ export default function TempoControl({ dest }: TempoControlProps) {
           }
           className="flex-1"
         />
-        <span className="font-mono text-sm w-10 text-right" style={{ color: '#2d1810' }}>
+        <span className="font-mono text-sm w-10 text-right text-white">
           {settings.bpm}
         </span>
 
         <button
           onClick={playing ? stopSequencer : startSequencer}
-          className={`px-4 py-1.5 rounded-lg text-sm font-bold transition cursor-pointer ${
-            playing
-              ? 'bg-red-600 hover:bg-red-500 text-white'
-              : 'bg-green-600 hover:bg-green-500 text-white'
-          }`}
+          className="text-sm font-medium transition cursor-pointer hover:opacity-60"
+          style={{
+            color: playing ? '#ef4444' : '#ffffff',
+            background: 'none',
+            border: 'none',
+            padding: '4px 0',
+            textDecoration: 'underline',
+            textUnderlineOffset: '4px',
+          }}
         >
-          {playing ? 'Stop' : 'Play'}
+          {playing ? 'stop' : 'play'}
         </button>
       </div>
 
@@ -200,7 +204,7 @@ export default function TempoControl({ dest }: TempoControlProps) {
       <div className="space-y-1 overflow-x-auto">
         {INSTRUMENTS.map((inst) => (
           <div key={inst.id} className="flex items-center gap-1">
-            <span className="text-xs w-12 shrink-0 text-right pr-2" style={{ color: 'rgba(45,24,16,0.5)' }}>
+            <span className="text-xs w-12 shrink-0 text-right pr-2" style={{ color: 'rgba(255,255,255,0.5)' }}>
               {inst.label}
             </span>
             {grid.map((step, stepIdx) => (
@@ -214,9 +218,9 @@ export default function TempoControl({ dest }: TempoControlProps) {
                   backgroundColor: step[inst.id]
                     ? inst.color
                     : stepIdx === currentStep
-                      ? 'rgba(45,24,16,0.12)'
-                      : 'rgba(45,24,16,0.06)',
-                  ...(stepIdx === currentStep ? { '--tw-ring-color': 'rgba(45,24,16,0.3)' } as React.CSSProperties : {}),
+                      ? 'rgba(255,255,255,0.15)'
+                      : 'rgba(255,255,255,0.06)',
+                  ...(stepIdx === currentStep ? { '--tw-ring-color': 'rgba(255,255,255,0.3)' } as React.CSSProperties : {}),
                 }}
               />
             ))}

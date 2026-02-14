@@ -1,6 +1,7 @@
 import type {
   LastFmTopArtistsResponse,
   LastFmTopTracksResponse,
+  LastFmTopAlbumsResponse,
   LastFmUserInfo,
   TimePeriod,
 } from '../types';
@@ -60,6 +61,21 @@ export async function getTopTracks(
   limit = 10
 ): Promise<LastFmTopTracksResponse> {
   const url = buildUrl('user.gettoptracks', {
+    user: username,
+    period,
+    limit: limit.toString(),
+  });
+  const res = await rateLimitedFetch(url);
+  if (!res.ok) throw new Error(`Last.fm API error: ${res.status}`);
+  return res.json();
+}
+
+export async function getTopAlbums(
+  username: string,
+  period: TimePeriod = 'overall',
+  limit = 10
+): Promise<LastFmTopAlbumsResponse> {
+  const url = buildUrl('user.gettopalbums', {
     user: username,
     period,
     limit: limit.toString(),

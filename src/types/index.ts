@@ -11,6 +11,13 @@ export interface FilmStill {
   description?: string;
 }
 
+export interface VideoItem {
+  src: string;
+  title: string;
+  description?: string;
+  type: 'youtube' | 'vimeo' | 'direct';
+}
+
 export interface LastFmArtist {
   name: string;
   playcount: string;
@@ -19,6 +26,14 @@ export interface LastFmArtist {
 }
 
 export interface LastFmTrack {
+  name: string;
+  playcount: string;
+  artist: { name: string; url: string };
+  url: string;
+  image: { '#text': string; size: string }[];
+}
+
+export interface LastFmAlbum {
   name: string;
   playcount: string;
   artist: { name: string; url: string };
@@ -44,6 +59,12 @@ export interface LastFmTopArtistsResponse {
 export interface LastFmTopTracksResponse {
   toptracks: {
     track: LastFmTrack[];
+  };
+}
+
+export interface LastFmTopAlbumsResponse {
+  topalbums: {
+    album: LastFmAlbum[];
   };
 }
 

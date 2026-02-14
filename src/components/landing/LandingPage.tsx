@@ -6,22 +6,17 @@ import {
   ContactShadows,
 } from '@react-three/drei';
 import { useNavigate } from 'react-router-dom';
-import RotatableModel from './RotatableModel';
-import { ModelErrorBoundary } from '../ModelErrorBoundary';
-import type { TexturePaths } from '../../types';
-
-const MODEL_PATH = '/models/landing.glb';
-
-const LANDING_TEXTURES: TexturePaths | undefined = undefined;
+import CdModel from './CdModel';
+import GridBackground from '../GridBackground';
 
 function FallbackModel() {
   return (
     <mesh>
       <icosahedronGeometry args={[1.2, 3]} />
       <meshStandardMaterial
-        color="#2d1810"
+        color="#ffffff"
         wireframe
-        emissive="#2d1810"
+        emissive="#ffffff"
         emissiveIntensity={0.3}
       />
     </mesh>
@@ -32,31 +27,34 @@ export default function LandingPage() {
   const navigate = useNavigate();
 
   return (
-    <div className="relative w-full h-screen overflow-hidden" style={{ background: '#f5f0eb' }}>
+    <div className="relative w-full h-screen overflow-hidden" style={{ background: '#0a0a0a' }}>
+      {/* Grid background */}
+      <GridBackground />
+
       {/* Large title - top left */}
       <div className="absolute top-6 left-8 z-10 pointer-events-none select-none">
         <h1
-          className="font-bold uppercase leading-[0.85] tracking-[-0.04em]"
-          style={{ color: '#2d1810', fontSize: 'clamp(4rem, 12vw, 12rem)' }}
+          className="font-bold lowercase leading-[0.85] tracking-[-0.06em]"
+          style={{ color: '#ffffff', fontSize: 'clamp(4rem, 12vw, 12rem)' }}
         >
-          HSOH
+          hsoh
         </h1>
       </div>
 
       {/* Navigation - top right */}
       <nav className="absolute top-8 right-10 z-10 flex flex-col items-end gap-1">
         {[
-          { path: '/landing', label: 'Home' },
-          { path: '/gallery', label: 'Gallery' },
-          { path: '/mp3-stats', label: 'Stats' },
-          { path: '/studio', label: 'Studio' },
+          { path: '/landing', label: 'home' },
+          { path: '/gallery', label: 'gallery' },
+          { path: '/mp3-stats', label: 'stats' },
+          { path: '/studio', label: 'studio' },
         ].map((item, i) => (
           <button
             key={item.path}
             onClick={() => navigate(item.path)}
-            className="text-sm font-medium tracking-wide transition-all cursor-pointer hover:opacity-60"
+            className="text-sm font-medium tracking-[-0.02em] transition-all cursor-pointer hover:opacity-60"
             style={{
-              color: '#2d1810',
+              color: '#ffffff',
               background: 'none',
               border: 'none',
               padding: '2px 0',
@@ -77,7 +75,7 @@ export default function LandingPage() {
           target="_blank"
           rel="noopener noreferrer"
           className="text-xs font-medium uppercase tracking-widest hover:opacity-60 transition"
-          style={{ color: '#2d1810' }}
+          style={{ color: '#ffffff' }}
         >
           Spotify
         </a>
@@ -86,35 +84,35 @@ export default function LandingPage() {
           target="_blank"
           rel="noopener noreferrer"
           className="text-xs font-medium uppercase tracking-widest hover:opacity-60 transition"
-          style={{ color: '#2d1810' }}
+          style={{ color: '#ffffff' }}
         >
           YouTube
         </a>
       </div>
 
-      {/* 3D Canvas - centered */}
-      <div className="absolute inset-0 z-0">
+      {/* 3D Canvas - centered, only the model moves */}
+      <div className="absolute inset-0 z-[1]">
         <Canvas
           camera={{ position: [0, 1, 4], fov: 50 }}
+          dpr={[1, 1.5]}
           style={{ width: '100%', height: '100%' }}
         >
-          <ambientLight intensity={0.6} />
-          <directionalLight position={[5, 5, 5]} intensity={1.2} castShadow />
-          <pointLight position={[-3, 2, -3]} intensity={0.4} color="#c4a882" />
+          <ambientLight intensity={0.4} />
+          <directionalLight position={[5, 5, 5]} intensity={1} castShadow />
+          <pointLight position={[-3, 2, -3]} intensity={0.3} color="#6366f1" />
 
-          <ModelErrorBoundary fallback={<FallbackModel />}>
-            <Suspense fallback={<FallbackModel />}>
-              <RotatableModel modelPath={MODEL_PATH} scale={4.5} textures={LANDING_TEXTURES} />
-            </Suspense>
-          </ModelErrorBoundary>
+          <Suspense fallback={<FallbackModel />}>
+            <CdModel scale={2.2} position={[0, 0.2, 0]} />
+          </Suspense>
 
           <ContactShadows
             position={[0, -2, 0]}
-            opacity={0.3}
+            opacity={0.2}
             scale={12}
             blur={2.5}
+            color="#000000"
           />
-          <Environment preset="city" />
+          <Environment preset="night" />
           <OrbitControls
             enablePan={false}
             enableZoom={false}
@@ -124,17 +122,15 @@ export default function LandingPage() {
         </Canvas>
       </div>
 
-      {/* Description - bottom left */}
+      {/* Description - bottom left (static, z-10 above canvas) */}
       <div className="absolute bottom-24 left-8 z-10 pointer-events-none select-none">
         <p
           className="text-xs uppercase tracking-[0.2em] leading-relaxed font-medium max-w-[200px]"
-          style={{ color: '#2d1810' }}
+          style={{ color: 'rgba(255,255,255,0.5)' }}
         >
           I MAKE THINGS (SOMETIMES)
         </p>
       </div>
-
-
     </div>
   );
 }

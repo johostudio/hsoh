@@ -3,8 +3,10 @@ import {
   getUserInfo,
   getTopArtists,
   getTopTracks,
+  getTopAlbums,
 } from '../../../lib/lastfmApi';
 import type {
+  LastFmAlbum,
   LastFmArtist,
   LastFmTrack,
   LastFmUserInfo,
@@ -15,6 +17,7 @@ interface LastFmData {
   userInfo: LastFmUserInfo | null;
   topArtists: LastFmArtist[];
   topTracks: LastFmTrack[];
+  topAlbums: LastFmAlbum[];
   loading: boolean;
   error: string | null;
   period: TimePeriod;
@@ -22,14 +25,17 @@ interface LastFmData {
   fetchData: (username: string) => void;
 }
 
+const DEFAULT_USERNAME = 'hosshh';
+
 export function useLastFmData(): LastFmData {
   const [userInfo, setUserInfo] = useState<LastFmUserInfo | null>(null);
   const [topArtists, setTopArtists] = useState<LastFmArtist[]>([]);
   const [topTracks, setTopTracks] = useState<LastFmTrack[]>([]);
+  const [topAlbums, setTopAlbums] = useState<LastFmAlbum[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [period, setPeriod] = useState<TimePeriod>('1month');
-  const [username, setUsername] = useState('');
+  const [username, setUsername] = useState(DEFAULT_USERNAME);
 
   const fetchData = useCallback((user: string) => {
     setUsername(user);
@@ -45,15 +51,17 @@ export function useLastFmData(): LastFmData {
 
     (async () => {
       try {
-        const [info, artists, tracks] = await Promise.all([
+        const [info, artists, tracks, albums] = await Promise.all([
           getUserInfo(username),
           getTopArtists(username, period, 10),
           getTopTracks(username, period, 10),
+          getTopAlbums(username, period, 10),
         ]);
         if (cancelled) return;
         setUserInfo(info);
         setTopArtists(artists.topartists?.artist ?? []);
         setTopTracks(tracks.toptracks?.track ?? []);
+        setTopAlbums(albums.topalbums?.album ?? []);
       } catch (err) {
         if (cancelled) return;
         setError(err instanceof Error ? err.message : 'Failed to fetch data');
@@ -69,6 +77,7 @@ export function useLastFmData(): LastFmData {
     userInfo,
     topArtists,
     topTracks,
+    topAlbums,
     loading,
     error,
     period,

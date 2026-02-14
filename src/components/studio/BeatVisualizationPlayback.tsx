@@ -39,7 +39,6 @@ function VisualizerBars({ analyser }: { analyser: AnalyserNode }) {
       dummy.updateMatrix();
       meshRef.current.setMatrixAt(i, dummy.matrix);
 
-      // Color based on frequency range
       const hue = (i / barCount) * 0.8;
       colorObj.setHSL(hue, 0.8, 0.3 + value * 0.4);
       meshRef.current.setColorAt(i, colorObj);
@@ -71,10 +70,10 @@ function InactiveVisualizer() {
     <mesh ref={meshRef}>
       <torusKnotGeometry args={[1, 0.3, 128, 32]} />
       <meshStandardMaterial
-        color="#8b7355"
+        color="#6366f1"
         wireframe
-        emissive="#6b5842"
-        emissiveIntensity={0.2}
+        emissive="#4f46e5"
+        emissiveIntensity={0.3}
       />
     </mesh>
   );
@@ -85,11 +84,11 @@ export default function BeatVisualizationPlayback({
   isActive,
 }: BeatVisualizationPlaybackProps) {
   return (
-    <div className="w-full h-64 rounded-xl overflow-hidden" style={{ border: '1px solid rgba(45,24,16,0.1)' }}>
+    <div className="w-full h-64 rounded-xl overflow-hidden" style={{ border: '1px solid rgba(255,255,255,0.1)' }}>
       <Canvas camera={{ position: [0, 2, 5], fov: 50 }}>
-        <ambientLight intensity={0.3} />
-        <pointLight position={[0, 5, 0]} intensity={1} color="#818cf8" />
-        <pointLight position={[3, 2, 3]} intensity={0.5} color="#c084fc" />
+        <ambientLight intensity={0.2} />
+        <pointLight position={[0, 5, 0]} intensity={0.8} color="#818cf8" />
+        <pointLight position={[3, 2, 3]} intensity={0.4} color="#c084fc" />
 
         {isActive && analyser ? (
           <VisualizerBars analyser={analyser} />

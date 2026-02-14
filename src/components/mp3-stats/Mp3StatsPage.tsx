@@ -1,36 +1,65 @@
-import { Suspense, useState } from 'react';
+import { Suspense, useState, useRef, useCallback, useEffect } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { OrbitControls, Environment } from '@react-three/drei';
 import { useNavigate } from 'react-router-dom';
 import Mp3PlayerModel, { FallbackPlayer } from './Mp3PlayerModel';
 import LastFmDashboard from './LastFmDashboard';
-import CdMockupGenerator from './CdMockupGenerator';
-import { ModelErrorBoundary } from '../ModelErrorBoundary';
-import { useLastFmData } from './hooks/useLastFmData';
-
-const MP3_MODEL_PATH = '/models/mp3player.glb';
+import GridBackground from '../GridBackground';
 
 export default function Mp3StatsPage() {
   const navigate = useNavigate();
   const [showDashboard, setShowDashboard] = useState(false);
-  const { topArtists, topTracks, userInfo, period } = useLastFmData();
+  const [isAnimating, setIsAnimating] = useState(false);
+  const contentRef = useRef<HTMLDivElement>(null);
+
+  const handleOpenDashboard = useCallback(() => {
+    setIsAnimating(true);
+    setTimeout(() => {
+      setShowDashboard(true);
+      setIsAnimating(false);
+    }, 300);
+  }, []);
+
+  const handleCloseDashboard = useCallback(() => {
+    setIsAnimating(true);
+    setTimeout(() => {
+      setShowDashboard(false);
+      setIsAnimating(false);
+    }, 300);
+  }, []);
+
+  useEffect(() => {
+    if (showDashboard && contentRef.current) {
+      contentRef.current.style.opacity = '0';
+      contentRef.current.style.transform = 'translateY(20px)';
+      requestAnimationFrame(() => {
+        if (contentRef.current) {
+          contentRef.current.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+          contentRef.current.style.opacity = '1';
+          contentRef.current.style.transform = 'translateY(0)';
+        }
+      });
+    }
+  }, [showDashboard]);
 
   return (
-    <div className="relative w-full h-screen flex flex-col" style={{ background: '#f5f0eb' }}>
+    <div className="relative w-full h-screen overflow-hidden" style={{ background: '#0a0a0a' }}>
+      <GridBackground />
+
       {/* Navigation - top right */}
       <nav className="absolute top-8 right-10 z-10 flex flex-col items-end gap-1">
         {[
-          { path: '/landing', label: 'Home' },
-          { path: '/gallery', label: 'Gallery' },
-          { path: '/mp3-stats', label: 'Stats' },
-          { path: '/studio', label: 'Studio' },
+          { path: '/landing', label: 'home' },
+          { path: '/gallery', label: 'gallery' },
+          { path: '/mp3-stats', label: 'stats' },
+          { path: '/studio', label: 'studio' },
         ].map((item) => (
           <button
             key={item.path}
             onClick={() => navigate(item.path)}
-            className="text-sm font-medium tracking-wide transition-all cursor-pointer hover:opacity-60"
+            className="text-sm font-medium tracking-[-0.02em] transition-all cursor-pointer hover:opacity-60"
             style={{
-              color: '#2d1810',
+              color: '#ffffff',
               background: 'none',
               border: 'none',
               padding: '2px 0',
@@ -47,60 +76,65 @@ export default function Mp3StatsPage() {
       {/* Page title - centered */}
       <div className="absolute top-6 left-0 right-0 z-10 pointer-events-none select-none flex justify-center">
         <h1
-          className="font-bold uppercase leading-[0.85] tracking-[-0.04em]"
-          style={{ color: '#2d1810', fontSize: 'clamp(2.5rem, 8vw, 7rem)', fontFamily: "'Helvetica Neue', Helvetica, Arial, sans-serif" }}
+          className="font-bold lowercase leading-[0.85] tracking-[-0.06em]"
+          style={{ color: '#ffffff', fontSize: 'clamp(2.5rem, 8vw, 7rem)' }}
         >
-          STATS
+          stats
         </h1>
       </div>
 
       {!showDashboard ? (
-        <div className="flex-1">
+        <div
+          className="absolute left-0 right-0 bottom-0 z-[1]"
+          style={{
+            top: 'clamp(7rem, 14vw, 11rem)',
+            opacity: isAnimating ? 0 : 1,
+            transition: 'opacity 0.3s ease',
+          }}
+        >
           <Canvas camera={{ position: [0, 1, 5], fov: 45 }}>
-            <ambientLight intensity={0.6} />
-            <directionalLight position={[3, 5, 3]} intensity={1} />
-            <pointLight position={[-2, 3, -2]} intensity={0.4} color="#c4a882" />
+            <ambientLight intensity={0.4} />
+            <directionalLight position={[3, 5, 3]} intensity={0.8} />
+            <pointLight position={[-2, 3, -2]} intensity={0.3} color="#6366f1" />
 
-            <ModelErrorBoundary fallback={<FallbackPlayer onClick={() => setShowDashboard(true)} />}>
-              <Suspense fallback={<FallbackPlayer onClick={() => setShowDashboard(true)} />}>
-                <Mp3PlayerModel
-                  modelPath={MP3_MODEL_PATH}
-                  onClick={() => setShowDashboard(true)}
-                />
-              </Suspense>
-            </ModelErrorBoundary>
+            <Suspense fallback={<FallbackPlayer onClick={handleOpenDashboard} />}>
+              <Mp3PlayerModel onClick={handleOpenDashboard} />
+            </Suspense>
 
-            <Environment preset="studio" />
+            <Environment preset="night" />
             <OrbitControls enablePan={false} enableZoom={false} />
           </Canvas>
         </div>
       ) : (
-        <div className="flex-1 overflow-auto py-8 pt-24">
-          <LastFmDashboard />
-
-          <div className="mt-8">
-            <CdMockupGenerator
-              artists={topArtists}
-              tracks={topTracks}
-              username={userInfo?.user.name ?? ''}
-              period={period}
-            />
+        <div
+          ref={contentRef}
+          className="absolute inset-0 z-[1] overflow-auto flex items-start justify-center pt-28 pb-16"
+        >
+          <div className="w-full max-w-3xl px-6">
+            <LastFmDashboard />
           </div>
         </div>
       )}
 
-      {/* Bottom action */}
-      {showDashboard && (
-        <div className="absolute bottom-8 left-8 z-10">
+      {/* Bottom text */}
+      <div className="absolute bottom-8 left-8 z-10">
+        {showDashboard ? (
           <button
-            onClick={() => setShowDashboard(false)}
+            onClick={handleCloseDashboard}
             className="text-sm font-medium tracking-wide cursor-pointer hover:opacity-60 transition"
-            style={{ color: '#2d1810', background: 'none', border: 'none', textDecoration: 'underline', textUnderlineOffset: '4px' }}
+            style={{ color: '#ffffff', background: 'none', border: 'none', textDecoration: 'underline', textUnderlineOffset: '4px' }}
           >
             Back to Player
           </button>
-        </div>
-      )}
+        ) : (
+          <p
+            className="text-xs uppercase tracking-[0.2em] leading-relaxed font-medium max-w-[200px] pointer-events-none select-none"
+            style={{ color: 'rgba(255,255,255,0.5)' }}
+          >
+            MY LISTENING STATS
+          </p>
+        )}
+      </div>
     </div>
   );
 }

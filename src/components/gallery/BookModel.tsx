@@ -42,16 +42,16 @@ export function FallbackBook({ onOpen }: { onOpen: () => void }) {
       </mesh>
       <mesh position={[0.05, 0, 0]}>
         <boxGeometry args={[1.2, 1.7, 0.15]} />
-        <meshStandardMaterial color="#fafafa" />
+        <meshStandardMaterial color="#1a1a2e" />
       </mesh>
       <Html center position={[0, -1.4, 0]}>
         <span
           style={{
-            color: '#2d1810',
+            color: '#ffffff',
             fontSize: '12px',
             fontWeight: 600,
             whiteSpace: 'nowrap',
-            fontFamily: 'Helvetica Neue, Helvetica, Arial, sans-serif',
+            fontFamily: "'Alliance No.2', Helvetica Neue, Helvetica, Arial, sans-serif",
           }}
         >
           Click to explore
@@ -83,16 +83,16 @@ export default function BookModel({ modelPath, onOpen, textures }: BookModelProp
         onClick={onOpen}
         onPointerOver={() => setHovered(true)}
         onPointerOut={() => setHovered(false)}
-        scale={hovered ? 1.6 : 1.5}
+        scale={hovered ? 1.15 : 1.0}
       />
       <Html center position={[0, -2.2, 0]}>
         <span
           style={{
-            color: '#2d1810',
+            color: '#ffffff',
             fontSize: '12px',
             fontWeight: 600,
             whiteSpace: 'nowrap',
-            fontFamily: 'Helvetica Neue, Helvetica, Arial, sans-serif',
+            fontFamily: "'Alliance No.2', Helvetica Neue, Helvetica, Arial, sans-serif",
           }}
         >
           Click to explore

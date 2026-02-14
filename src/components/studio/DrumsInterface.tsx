@@ -46,7 +46,6 @@ export default function DrumsInterface({ dest }: DrumsInterfaceProps) {
     async (ctx: AudioContext) => {
       const now = ctx.currentTime;
 
-      // Noise component
       const bufferSize = ctx.sampleRate * 0.15;
       const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
       const data = buffer.getChannelData(0);
@@ -68,7 +67,6 @@ export default function DrumsInterface({ dest }: DrumsInterfaceProps) {
       noise.start(now);
       noise.stop(now + 0.15);
 
-      // Tone body
       const osc = ctx.createOscillator();
       const oscGain = ctx.createGain();
       osc.type = 'triangle';
@@ -192,7 +190,7 @@ export default function DrumsInterface({ dest }: DrumsInterfaceProps) {
 
   return (
     <div>
-      <h3 className="font-bold mb-3 text-sm uppercase tracking-wider" style={{ color: '#2d1810' }}>
+      <h3 className="font-bold mb-3 text-sm uppercase tracking-wider text-white">
         Drum Kit
       </h3>
       <div className="grid grid-cols-3 gap-3">

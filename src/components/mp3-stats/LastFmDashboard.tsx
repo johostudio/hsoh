@@ -151,8 +151,17 @@ function AlbumCascadeStack({ albums }: { albums: LastFmAlbum[] }) {
 }
 
 export default function LastFmDashboard() {
-  const { userInfo, topArtists, topTracks, topAlbums, loading, error, period, setPeriod } =
+  const { userInfo, topArtists, topTracks, topAlbums, loading, error, period, setPeriod, username, fetchData } =
     useLastFmData();
+  const [searchInput, setSearchInput] = useState(username);
+
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    const trimmed = searchInput.trim();
+    if (trimmed && trimmed !== username) {
+      fetchData(trimmed);
+    }
+  };
 
   return (
     <div className="w-full">
@@ -167,6 +176,33 @@ export default function LastFmDashboard() {
           {error}
         </div>
       )}
+
+      {/* Username search */}
+      <form onSubmit={handleSearch} className="flex items-center gap-2 mb-4">
+        <input
+          type="text"
+          value={searchInput}
+          onChange={(e) => setSearchInput(e.target.value)}
+          placeholder="last.fm username"
+          className="text-xs font-medium px-3 py-1.5 rounded-lg outline-none flex-1 max-w-[200px]"
+          style={{
+            background: 'rgba(255,255,255,0.05)',
+            border: '1px solid rgba(255,255,255,0.1)',
+            color: '#ffffff',
+          }}
+        />
+        <button
+          type="submit"
+          className="text-xs font-medium px-3 py-1.5 rounded-lg cursor-pointer transition hover:opacity-60"
+          style={{
+            background: 'rgba(255,255,255,0.05)',
+            border: '1px solid rgba(255,255,255,0.1)',
+            color: '#ffffff',
+          }}
+        >
+          search
+        </button>
+      </form>
 
       <div className="flex gap-8">
         {/* Period selector -- vertical tabs on the left */}

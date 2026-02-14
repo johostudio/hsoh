@@ -22,6 +22,7 @@ interface LastFmData {
   error: string | null;
   period: TimePeriod;
   setPeriod: (p: TimePeriod) => void;
+  username: string;
   fetchData: (username: string) => void;
 }
 
@@ -53,8 +54,8 @@ export function useLastFmData(): LastFmData {
       try {
         const [info, artists, tracks, albums] = await Promise.all([
           getUserInfo(username),
-          getTopArtists(username, period, 10),
-          getTopTracks(username, period, 10),
+          getTopArtists(username, period, 5),
+          getTopTracks(username, period, 5),
           getTopAlbums(username, period, 10),
         ]);
         if (cancelled) return;
@@ -82,6 +83,7 @@ export function useLastFmData(): LastFmData {
     error,
     period,
     setPeriod,
+    username,
     fetchData,
   };
 }

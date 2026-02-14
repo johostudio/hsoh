@@ -184,7 +184,8 @@ export default function StudioPage() {
       ) : (
         <div
           ref={contentRef}
-          className="absolute inset-0 z-[1] overflow-auto flex items-start justify-center pt-32 pb-24 px-6"
+          className="absolute inset-0 z-[1] overflow-auto flex items-start justify-center pb-24 px-6"
+          style={{ paddingTop: 'clamp(6rem, 10vw, 9rem)' }}
         >
           <div className="w-full max-w-xl space-y-5">
             {/* Visualization */}

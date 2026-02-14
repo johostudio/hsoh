@@ -71,7 +71,7 @@ export default function LandingPage() {
       {/* Social links - right side middle */}
       <div className="absolute right-10 top-1/2 -translate-y-1/2 z-10 flex flex-col items-end gap-0.5">
         <a
-          href="https://open.spotify.com"
+          href="https://open.spotify.com/user/ogkatb96r6pdery0jcaeak1fx?si=0e3e8351ea834f83"
           target="_blank"
           rel="noopener noreferrer"
           className="text-xs font-medium uppercase tracking-widest hover:opacity-60 transition"
@@ -80,13 +80,22 @@ export default function LandingPage() {
           Spotify
         </a>
         <a
-          href="https://youtube.com"
+          href="https://www.youtube.com/@hoshsoh"
           target="_blank"
           rel="noopener noreferrer"
           className="text-xs font-medium uppercase tracking-widest hover:opacity-60 transition"
           style={{ color: '#ffffff' }}
         >
           YouTube
+        </a>
+        <a
+          href="https://www.tiktok.com/@hsoh.wav"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-xs font-medium uppercase tracking-widest hover:opacity-60 transition"
+          style={{ color: '#ffffff' }}
+        >
+          TikTok
         </a>
       </div>
 
@@ -120,16 +129,6 @@ export default function LandingPage() {
             maxPolarAngle={Math.PI / 1.8}
           />
         </Canvas>
-      </div>
-
-      {/* Description - bottom left (static, z-10 above canvas) */}
-      <div className="absolute bottom-24 left-8 z-10 pointer-events-none select-none">
-        <p
-          className="text-xs uppercase tracking-[0.2em] leading-relaxed font-medium max-w-[200px]"
-          style={{ color: 'rgba(255,255,255,0.5)' }}
-        >
-          I MAKE THINGS (SOMETIMES)
-        </p>
       </div>
     </div>
   );

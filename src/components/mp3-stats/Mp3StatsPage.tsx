@@ -108,7 +108,8 @@ export default function Mp3StatsPage() {
       ) : (
         <div
           ref={contentRef}
-          className="absolute inset-0 z-[1] overflow-auto flex items-start justify-center pt-28 pb-16"
+          className="absolute inset-0 z-[1] overflow-auto flex items-start justify-center pb-16"
+          style={{ paddingTop: 'clamp(8rem, 14vw, 13rem)' }}
         >
           <div className="w-full max-w-3xl px-6">
             <LastFmDashboard />
